@@ -31,11 +31,18 @@ services:
       MYSQL_PORT: 3306
     networks:
       - mysql
+    volumes:
+      - ./backend:/app
 
   frontend:
     build: ./frontend
+    environment:
+      REACT_APP_BACKEND_URL: http://localhost:3000
+      PORT: 3001
     ports:
-      - "8080:3000"
+      - "3001:3001"
     networks:
       - mysql
+    volumes:
+      - ./frontend:/app
     

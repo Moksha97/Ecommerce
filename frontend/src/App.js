@@ -1,5 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
+import baseURL from './Config';
+
+// port 3000 is used by express
+function callApi() {
+  fetch(baseURL)
+  .then(res => res.text())
+  .then(res => console.log(res));
+}
+
+callApi();
 
 function App() {
   return (
@@ -20,6 +30,7 @@ function App() {
       </header>
     </div>
   );
-}
+} 
 
 export default App;
+
