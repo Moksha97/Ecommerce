@@ -1,23 +1,36 @@
 version: '0.1'
 
 networks:
-  mysql:
+  ecommerce:
     driver: bridge
 
 services:
   mysql:
     image: mysql:latest
     ports:
-      - "3306:3306"
+      - "9000:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test
+      MYSQL_DATABASE: ecommerce
       MYSQL_USER: test
       MYSQL_PASSWORD: test
     volumes:
       - ./mysql:/var/lib/mysql
     networks:
+      - ecommerce
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    links:
       - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: test
+      PMA_PASSWORD: test
+    networks:
+      - ecommerce
   
   backend:
     build: ./backend
@@ -27,10 +40,10 @@ services:
       MYSQL_HOST: mysql
       MYSQL_USER: test
       MYSQL_PASSWORD: test
-      MYSQL_DATABASE: test
-      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ecommerce
+      MYSQL_PORT: 9000
     networks:
-      - mysql
+      - ecommerce
     volumes:
       - ./backend:/app
 
@@ -42,7 +55,7 @@ services:
     ports:
       - "3001:3001"
     networks:
-      - mysql
+      - ecommerce
     volumes:
       - ./frontend:/app
     
