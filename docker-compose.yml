@@ -1,6 +1,5 @@
 version: '0.1'
 
-
 networks:
   mysql:
     driver: bridge
@@ -32,3 +31,11 @@ services:
       MYSQL_PORT: 3306
     networks:
       - mysql
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:3000"
+    networks:
+      - mysql
+    
