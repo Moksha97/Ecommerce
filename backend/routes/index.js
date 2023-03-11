@@ -6,7 +6,7 @@ var ash = require("express-async-handler");
 // query db
 router.get(
   "/",
-  ash(async function (req, res, next) {
+  ash(async function (req, res) {
     const [result] = await pool.query("select ?+? as sum", [2, 3]);
     res.json(result);
   })

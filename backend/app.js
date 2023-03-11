@@ -1,10 +1,8 @@
 var createError = require("http-errors");
 var express = require("express");
-var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
-var conn = require("./database/conn");
 var auth = require("./middleware/auth");
 var admin = require("./middleware/admin");
 var refresh = require("./middleware/refresh");
@@ -12,15 +10,6 @@ var verify = require("./middleware/verify");
 var login = require("./middleware/login");
 var logout = require("./middleware/logout");
 var signup = require("./middleware/signup");
-// var swaggerUi = require("swagger-ui-express");
-// var swaggerJsdoc = require("swagger-jsdoc");
-// var swaggerDefinition = require("./swagger.json");
-
-const options = {
-  exprolation: true,
-};
-
-// const specs = swaggerJsdoc(options);
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -36,8 +25,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors(corsOptions));
-
-// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDefinition));
 
 app.use("/signup", signup);
 app.use("/login", login);
@@ -72,7 +59,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};

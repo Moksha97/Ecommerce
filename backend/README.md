@@ -2,8 +2,8 @@
 
 ## Installation
 
-``` npm install ```
+`npm install`
 
 ## Run
 
-``` npm start ```
+`npm start`

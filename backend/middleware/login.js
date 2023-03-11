@@ -5,7 +5,7 @@ var db = require("../database/conn");
 var ash = require("express-async-handler");
 
 // verify user credentials
-async function verifyUser(req, res, next) {
+async function verifyUser(req, res) {
   var username = req.body.username;
   var password = req.body.password;
   var sql =
@@ -24,8 +24,8 @@ async function verifyUser(req, res, next) {
 // login middleware
 router.post(
   "/",
-  ash(async function (req, res, next) {
-    await verifyUser(req, res, next);
+  ash(async function (req, res) {
+    await verifyUser(req, res);
     var secret = process.env.JWT_SECRET;
     var expirty = process.env.JWT_EXPIRY;
     var token = jwt.sign(

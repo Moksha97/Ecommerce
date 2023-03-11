@@ -3,7 +3,7 @@ var router = express.Router();
 var jwt = require("jsonwebtoken");
 
 // Refresh JWT Token if it exists in the token cookie
-function refresh(req) {
+function refresh(req, res) {
   if (req.UserId) {
     var secret = process.env.JWT_SECRET;
     var expirty = process.env.JWT_EXPIRY;
@@ -17,7 +17,7 @@ function refresh(req) {
 }
 
 router.use(function (req, res, next) {
-  refresh(req);
+  refresh(req, res);
   next();
 });
 
