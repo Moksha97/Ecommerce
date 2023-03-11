@@ -8,7 +8,7 @@ function refresh(req) {
     if(req.UserId) {
         var secret = process.env.JWT_SECRET;
         var expirty = process.env.JWT_EXPIRY;
-        var token = jwt.sign({ id: req.userId, isAdmin: req.isAdmin}, secret, {expiresIn: expirty});
+        var token = jwt.sign({ userName: req.userName, isAdmin: req.isAdmin}, secret, {expiresIn: expirty});
         res.set('Authorization', token);
     }
 }

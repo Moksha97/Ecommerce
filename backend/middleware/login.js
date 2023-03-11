@@ -12,8 +12,8 @@ async function verifyUser(req, res, next) {
     var params = [username, password];
     const [result] = await db.query(sql, params);
     if (result.length > 0) {
-        req.userId = result[0].id;
-        req.isAdmin = result[0].isAdmin;
+        req.userName = result[0].username;
+        req.isAdmin = result[0].isadmin;
     }
     else {
         res.status(401).send("Invalid username or password");
@@ -26,7 +26,7 @@ router.post("/", ash(async function (req, res, next) {
     var secret = process.env.JWT_SECRET;
     var expirty = process.env.JWT_EXPIRY;
     var timestamp = Math.floor(Date.now() / 1000);
-    var token = jwt.sign({ id: req.userId, isAdmin: req.isAdmin, timestamp: timestamp }, secret, {
+    var token = jwt.sign({ userName: req.userName, isAdmin: req.isAdmin, timestamp: timestamp }, secret, {
         expiresIn: expirty
     });
     res.set('Authorization', token)

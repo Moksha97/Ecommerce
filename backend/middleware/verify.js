@@ -11,7 +11,7 @@ function verifyToken(req) {
     try {
         var secret = process.env.JWT_SECRET;
         var decoded = jwt.verify(token, secret);
-        req.userId = decoded.id;
+        req.userName = decoded.userName;
         req.isAdmin = decoded.isAdmin;
         return true;
     }
