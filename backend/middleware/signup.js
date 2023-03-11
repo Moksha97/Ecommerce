@@ -3,29 +3,34 @@ var router = express.Router();
 var jwt = require("jsonwebtoken");
 var db = require("../database/conn");
 var ash = require("express-async-handler");
+var login = require("./login");
 
-// verify user credentials
-async function verifyUser(req, res, next) {
+// add user to database
+async function addUser(req, res, next) {
   var username = req.body.username;
   var password = req.body.password;
+  var fname = req.body.fname;
+  var lname = req.body.lname;
   var sql =
-    "SELECT username, isadmin  FROM users WHERE username = ? AND password = ?";
-  var params = [username, password];
-  const [result] = await db.query(sql, params);
-  if (result.length > 0) {
-    console.log(result);
-    req.username = result[0].username;
-    req.isadmin = result[0].isadmin;
-  } else {
-    res.status(401).send("Invalid username or password");
+    "INSERT INTO users (username, password, fname, lname) VALUES (?, ?, ?, ?)";
+  var params = [username, password, fname, lname];
+
+  try {
+    var [result] = await db.query(sql, params);
+    if (result.affectedRows > 0) {
+      req.username = username;
+      req.isadmin = 0;
+    }
+  } catch (err) {
+    res.status(400).send("Invalid username or password");
   }
 }
 
-// login middleware
+// signup middleware
 router.post(
   "/",
   ash(async function (req, res, next) {
-    await verifyUser(req, res, next);
+    await addUser(req, res, next);
     var secret = process.env.JWT_SECRET;
     var expirty = process.env.JWT_EXPIRY;
     var token = jwt.sign(
