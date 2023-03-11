@@ -20,8 +20,5 @@
     "pug": "2.0.0-beta11",
     "swagger-jsdoc": "^6.0.0",
     "swagger-ui-express": "^4.1.6"
-  },
-  "devDependencies": {
-    "eslint": "^8.36.0"
   }
 }
