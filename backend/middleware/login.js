@@ -25,11 +25,8 @@ router.post("/", ash(async function (req, res, next) {
     await verifyUser(req, res, next);
     var secret = process.env.JWT_SECRET;
     var expirty = process.env.JWT_EXPIRY;
-    var timestamp = Math.floor(Date.now() / 1000);
-    var token = jwt.sign({ userName: req.userName, isAdmin: req.isAdmin, timestamp: timestamp }, secret, {
-        expiresIn: expirty
-    });
-    res.set('Authorization', token)
+    var token = jwt.sign({ userName: req.userName, isAdmin: req.isAdmin}, secret, {expiresIn: expirty});
+    res.cookie('token', token, { httpOnly: true });
     res.json({ token: token });
 }
 ));

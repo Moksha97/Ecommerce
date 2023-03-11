@@ -54,7 +54,7 @@ services:
       MYSQL_PASSWORD: test
       MYSQL_DATABASE: ecommerce
       JWT_SECRET: secret
-      JWT_EXPIRY: 86400 # 24 hours
+      JWT_EXPIRY: 24h # 24 hours
     networks:
       - ecommerce
     volumes:

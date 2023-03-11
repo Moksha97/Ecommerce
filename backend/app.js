@@ -33,6 +33,7 @@ var corsOptions = {
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser())
 app.use(cors(corsOptions));
 
 // app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDefinition));
