@@ -10,9 +10,6 @@ function callApi() {
     .then((res) => console.log(res));
 }
 
-
-
-
 callApi();
 
 function App() {
