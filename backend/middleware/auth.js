@@ -6,7 +6,7 @@ router.use(function (req, res, next) {
   if (!req.username)
     return res
       .status(401)
-      .send({ auth: false, message: "No token provided or Invalid token." });
+      .json({ error: "No token provided or Invalid token." });
   next();
 });
 

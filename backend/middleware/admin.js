@@ -6,7 +6,7 @@ router.use(function (req, res, next) {
   if (!req.isadmin)
     return res
       .status(401)
-      .send({ auth: false, message: "You are not an admin." });
+      .json({ error: "No token provided or Invalid token." });
   next();
 });
 

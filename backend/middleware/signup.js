@@ -21,7 +21,7 @@ async function addUser(req, res) {
       req.isadmin = 0;
     }
   } catch (err) {
-    res.status(400).send("Invalid username or password");
+    res.status(400).json({ error: "Username already exists" });
   }
 }
 
