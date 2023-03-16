@@ -40,10 +40,10 @@ function Signup() {
     <div>
       <h1>Signup</h1>
       <form>
-        <input type="email" id="username" placeholder="username" required />
-        <input type="password" id="password" placeholder="password" required />
-        <input type="text" id="fname" placeholder="first name" required />
-        <input type="text" id="lname" placeholder="last name" required />
+        <input type="email" id="username" placeholder="username" />
+        <input type="password" id="password" placeholder="password" />
+        <input type="text" id="fname" placeholder="first name" />
+        <input type="text" id="lname" placeholder="last name" />
         <button
           type="button"
           onClick={() =>
