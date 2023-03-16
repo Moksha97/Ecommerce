@@ -1,8 +1,8 @@
 import React from "react";
-import baseURL from "../Config";
 import { Link } from "react-router-dom";
 import { emailcheck } from "../utils/emailcheck";
 import { useNavigate } from "react-router-dom";
+import axios from "../httpreq";
 
 function Login() {
   const navigate = useNavigate();
@@ -20,18 +20,10 @@ function Login() {
       return;
     }
 
-    const res = await fetch(baseURL + "/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
+    const data = await axios.post("/login", {
+      username: username,
+      password: password,
     });
-
-    const data = await res.json();
 
     // check for error
     if (data.error) {
@@ -41,7 +33,7 @@ function Login() {
       if (data.isadmin === 1) {
         navigate("/admin");
       } else {
-        navigate("/user");
+        navigate("/users");
       }
     }
   }

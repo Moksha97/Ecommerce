@@ -1,10 +1,10 @@
-import baseURL from "../Config";
 import { Navigate } from "react-router-dom";
 import React from "react";
+import axios from "../httpreq";
 
 function Logout() {
   async function logoutapi() {
-    await fetch(baseURL + "/logout");
+    await axios.get("/logout");
   }
 
   logoutapi();

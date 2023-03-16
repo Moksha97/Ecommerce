@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<ProductLanding />} />
           <Route exact path="/login" element={<Login />} />
-          <Route exact path="/user" element={<Landing />} />
+          <Route exact path="/users" element={<Landing />} />
           <Route exact path="/admin" element={<AdminLanding />} />
           <Route exact path="/logout" element={<Logout />} />
           <Route exact path="/signup" element={<Signup />} />

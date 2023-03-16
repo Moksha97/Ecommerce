@@ -1,8 +1,8 @@
 import React from "react";
-import baseURL from "../Config";
 import { emailcheck } from "../utils/emailcheck";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import axios from "../httpreq";
 // import { passwordcheck } from "../utils/passwordcheck";
 
 // signup page with a error handling
@@ -22,23 +22,17 @@ function Signup() {
       return;
     }
 
-    const res = await fetch(baseURL + "/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-        fname: fname,
-        lname: lname,
-      }),
+    const data = await axios.post("/signup", {
+      username: username,
+      password: password,
+      fname: fname,
+      lname: lname,
     });
-    const data = await res.json();
+
     if (data.error) {
       alert(data.error);
     } else {
-      navigate("/user");
+      navigate("/users");
     }
   }
 

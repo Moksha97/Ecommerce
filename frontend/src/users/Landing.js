@@ -3,16 +3,13 @@ import { Link } from "react-router-dom";
 import axios from "../httpreq";
 
 async function test() {
-  // axios with credentials
-  var res = await axios.get("/");
-  console.log(res.data);
+  await axios.get("/");
 }
 
 function Landing() {
-  test();
   return (
     <div>
-      <h1>Welcome to the users landing page</h1>
+      <h1 onClick={test}>Welcome to the users landing page</h1>
       <Link to="/logout">Logout</Link>
     </div>
   );
