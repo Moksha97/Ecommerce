@@ -1,8 +1,8 @@
 var express = require("express");
 var router = express.Router();
-var jwt = require("jsonwebtoken");
 var db = require("../database/conn");
 var ash = require("express-async-handler");
+var gettoken = require("../helpers/gettoken");
 
 // add user to database
 async function addUser(req, res) {
@@ -30,13 +30,7 @@ router.post(
   "/",
   ash(async function (req, res) {
     await addUser(req, res);
-    var secret = process.env.JWT_SECRET;
-    var expirty = process.env.JWT_EXPIRY;
-    var token = jwt.sign(
-      { username: req.username, isadmin: req.isadmin },
-      secret,
-      { expiresIn: expirty }
-    );
+    var token = gettoken(req.username, req.isadmin);
     res.cookie("token", token, { httpOnly: true });
     res.json({ username: req.username, isadmin: req.isadmin });
   })

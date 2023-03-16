@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var jwt = require("jsonwebtoken");
+var gettoken = require("../helpers/gettoken");
 var db = require("../database/conn");
 var ash = require("express-async-handler");
 
@@ -25,13 +25,7 @@ router.post(
   "/",
   ash(async function (req, res) {
     await verifyUser(req, res);
-    var secret = process.env.JWT_SECRET;
-    var expiry = process.env.JWT_EXPIRY;
-    var token = jwt.sign(
-      { username: req.username, isadmin: req.isadmin },
-      secret,
-      { expiresIn: expiry }
-    );
+    var token = gettoken(req.username, req.isadmin);
     res.cookie("token", token, { httpOnly: true });
     res.status(200).json({ username: req.username, isadmin: req.isadmin });
   })
