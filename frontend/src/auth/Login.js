@@ -42,7 +42,7 @@ function Login() {
     <div>
       <h1>Login</h1>
       <form>
-        <input type="text" id="username" placeholder="username" />
+        <input type="email" id="username" placeholder="username" />
         <input type="password" id="password" placeholder="password" />
         <button
           type="button"
