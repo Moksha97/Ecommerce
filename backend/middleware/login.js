@@ -16,7 +16,7 @@ async function verifyUser(req, res) {
     req.username = result[0].username;
     req.isadmin = result[0].isadmin;
   } else {
-    res.status(401).json({ error: "Invalid username or password" });
+    res.status(400).json({ error: "Invalid username or password" });
   }
 }
 
