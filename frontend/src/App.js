@@ -20,7 +20,6 @@ function App() {
           <Route exact path="/logout" element={<Logout />} />
           <Route exact path="/signup" element={<Signup />} />
         </Routes>
-        <p>Hi</p>
       </div>
     </Router>
   );
