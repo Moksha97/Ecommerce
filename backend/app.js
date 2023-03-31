@@ -6,7 +6,6 @@ var cors = require("cors");
 var auth = require("./middleware/auth");
 var admin = require("./middleware/admin");
 var refresh = require("./middleware/refresh");
-
 var verify = require("./middleware/verify");
 var login = require("./middleware/login");
 var logout = require("./middleware/logout");
