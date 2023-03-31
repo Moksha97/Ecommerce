@@ -10,14 +10,14 @@ var verify = require("./middleware/verify");
 var login = require("./middleware/login");
 var logout = require("./middleware/logout");
 var signup = require("./middleware/signup");
-
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
 var app = express();
 
 var corsOptions = {
-  origin: "*",
+  origin: true,
+  credentials: true,
 };
 
 app.use(logger("dev"));

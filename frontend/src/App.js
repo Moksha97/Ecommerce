@@ -1,35 +1,27 @@
-import logo from "./logo.svg";
 import "./App.css";
-import baseURL from "./Config";
 import React from "react";
-
-// port 3000 is used by express
-function callApi() {
-  fetch(baseURL)
-    .then((res) => res.text())
-    .then((res) => console.log(res));
-}
-
-callApi();
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import ProductLanding from "./product/Landing";
+import Landing from "./users/Landing";
+import AdminLanding from "./admin/Landing";
+import Login from "./auth/Login";
+import Logout from "./auth/Logout";
+import Signup from "./auth/Signup";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route exact path="/" element={<ProductLanding />} />
+          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/users" element={<Landing />} />
+          <Route exact path="/admin" element={<AdminLanding />} />
+          <Route exact path="/logout" element={<Logout />} />
+          <Route exact path="/signup" element={<Signup />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

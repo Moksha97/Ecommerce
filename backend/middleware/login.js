@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var jwt = require("jsonwebtoken");
+var gettoken = require("../helpers/gettoken");
 var db = require("../database/conn");
 var ash = require("express-async-handler");
 
@@ -13,11 +13,10 @@ async function verifyUser(req, res) {
   var params = [username, password];
   const [result] = await db.query(sql, params);
   if (result.length > 0) {
-    console.log(result);
     req.username = result[0].username;
     req.isadmin = result[0].isadmin;
   } else {
-    res.status(401).send("Invalid username or password");
+    res.status(400).json({ error: "Invalid username or password" });
   }
 }
 
@@ -26,15 +25,9 @@ router.post(
   "/",
   ash(async function (req, res) {
     await verifyUser(req, res);
-    var secret = process.env.JWT_SECRET;
-    var expirty = process.env.JWT_EXPIRY;
-    var token = jwt.sign(
-      { username: req.username, isadmin: req.isadmin },
-      secret,
-      { expiresIn: expirty }
-    );
+    var token = gettoken(req.username, req.isadmin);
     res.cookie("token", token, { httpOnly: true });
-    res.json({ username: req.username, isadmin: req.isadmin });
+    res.status(200).json({ username: req.username, isadmin: req.isadmin });
   })
 );
 
