@@ -1,2 +1,2 @@
-DELETE FROM users;
-DROP TABLE users;
+DELETE FROM user;
+DROP TABLE user;

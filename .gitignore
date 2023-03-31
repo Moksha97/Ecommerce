@@ -1,3 +1,5 @@
 mysql
 node_modules
 .eslintcache
+frontend/package-lock.json
+frontend/package.json
