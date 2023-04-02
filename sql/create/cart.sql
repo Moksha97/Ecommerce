@@ -2,7 +2,7 @@ CREATE TABLE cart
 (
     pid      INT,
     sid      INT,
-    username VARCHAR(50),
+    username VARCHAR(40),
     quantity INT,
     PRIMARY KEY cid (username, pid, sid),
     FOREIGN KEY (pid) REFERENCES product (pid),
