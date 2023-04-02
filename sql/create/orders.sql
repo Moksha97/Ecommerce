@@ -5,7 +5,7 @@ CREATE TABLE `order`
     timestamp DATETIME,
     username  varchar(40),
     aid       INT,
-    payid     INT,
+    payid     INT UNIQUE,
     FOREIGN KEY (username) REFERENCES user (username),
     FOREIGN KEY (aid) REFERENCES address (aid),
     FOREIGN KEY (payid) REFERENCES payment (payid)
