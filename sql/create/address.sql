@@ -6,7 +6,7 @@ CREATE TABLE address
     city     VARCHAR(255),
     state    VARCHAR(50),
     zip      INT,
-    username VARCHAR(255),
+    username VARCHAR(40),
     PRIMARY KEY (aid),
     FOREIGN KEY (username) REFERENCES user (username)
 );
