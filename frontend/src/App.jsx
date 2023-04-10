@@ -1,4 +1,3 @@
-import "./App.css";
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ProductLanding from "./product/Landing";
@@ -10,8 +9,8 @@ import Signup from "./auth/Signup";
 
 function App() {
   return (
-    <Router>
-      <div className="App">
+    <div className="App">
+      <Router>
         <Routes>
           <Route exact path="/" element={<ProductLanding />} />
           <Route exact path="/login" element={<Login />} />
@@ -20,8 +19,8 @@ function App() {
           <Route exact path="/logout" element={<Logout />} />
           <Route exact path="/signup" element={<Signup />} />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 

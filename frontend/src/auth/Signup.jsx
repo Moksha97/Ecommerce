@@ -1,5 +1,4 @@
 import React from "react";
-import { emailcheck } from "../utils/emailcheck";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "../httpreq";
@@ -13,12 +12,6 @@ function Signup() {
     // check if all fields are filled
     if (username === "" || password === "" || fname === "" || lname === "") {
       alert("Please fill in all fields");
-      return;
-    }
-
-    // check if email is valid
-    if (!emailcheck(username)) {
-      alert("Invalid email");
       return;
     }
 
