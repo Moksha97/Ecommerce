@@ -16,7 +16,7 @@ ax.interceptors.response.use(
     if (error.response.status === 401) {
       window.location.href = "/login";
     }
-    return Promise.reject(error);
+    return error;
   }
 );
 
@@ -29,7 +29,7 @@ ax.interceptors.response.use(
     if (error.response.status === 500) {
       alert("Internal server error" + error.response.data);
     }
-    return Promise.reject(error);
+    return error;
   }
 );
 
