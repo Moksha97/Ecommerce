@@ -8,7 +8,10 @@ export default class AppHeader extends Component {
     return (
       <Header>
         <div className="header-col header-brand">
-          <h5>MyShop</h5>
+          <h5 style={{ fontSize: "2rem" }}>
+            <span style={{ color: "#0076be" }}>My</span>
+            <span style={{ color: "#48bf91" }}>Shop</span>
+          </h5>
         </div>
         <div className="header-col header-nav">
           <Menu

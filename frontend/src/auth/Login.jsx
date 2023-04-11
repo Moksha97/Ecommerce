@@ -66,7 +66,11 @@ const Login = () => {
               md={{ span: 12 }}
             >
               <Title className="mb-15 text-center">Sign in</Title>
-              <Title className="font-regular text-muted text-center" level={5}>
+              <Title
+                className="font-regular text-muted text-center"
+                level={5}
+                style={{ marginBottom: "3rem" }}
+              >
                 Please sign into your account
               </Title>
               <Form
