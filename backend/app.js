@@ -12,6 +12,7 @@ var logout = require("./middleware/logout");
 var signup = require("./middleware/signup");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var productRouter = require("./routes/product");
 
 var app = express();
 
@@ -38,7 +39,7 @@ app.use(refresh);
 
 // Un Authenticated Routes
 // Product Routes
-//app.use('/products', productsRouter);
+app.use("/product", productRouter);
 
 // Authentication Middleware
 app.use(auth);
