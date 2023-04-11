@@ -6,7 +6,9 @@ var ash = require("express-async-handler");
 const isFloat = function (value) {
   return typeof value === "number" && isFinite(value);
 };
-
+async function getProductByPid(pid) {
+  return await getProductsByPids([pid]);
+}
 async function getProductsByPids(pids) {
   // var product_query = "SELECT pid, pname FROM product WHERE pid IN (?)";
   // const [pnames] = await db.query(product_query, [pids]);
@@ -22,7 +24,7 @@ async function getProductsByPids(pids) {
   var product_query =
     "SELECT product.pid, pname, pcategory, pdesc, seller.sid, sname, price, discount, quantity, rating ";
   product_query +=
-    "FROM (product LEFT JOIN (SELECT pid, CAST(AVG(rating) AS DECIMAL(2, 1)) as rating FROM productrating as prodrat GROUP BY prodrat.pid) as r ON product.pid = r.pid) LEFT JOIN (inventory NATURAL JOIN seller) ON product.pid = inventory.pid ";
+    "FROM (product LEFT JOIN (SELECT pid, CAST(AVG(rating) AS DECIMAL(2, 1)) as rating FROM productrating GROUP BY pid) as r ON product.pid = r.pid) LEFT JOIN (inventory NATURAL JOIN seller) ON product.pid = inventory.pid ";
   product_query += " WHERE product.pid IN (?)";
 
   const [all_products] = await db.query(product_query, [pids]);
@@ -81,6 +83,9 @@ async function getProductsByPids(pids) {
         option.quantity = all_products[j].quantity;
         product.options.push(option);
       }
+    }
+    if (product.pname === null) {
+      continue;
     }
     products.push(product);
   }
@@ -267,6 +272,28 @@ router.post(
     response.products = await getProductsByPids(pids);
 
     res.json(response);
+  })
+);
+
+router.get(
+  "/:pid",
+  ash(async (req, res) => {
+    const pid = req.params.pid;
+    if (!pid) {
+      res.status(400).json({ error: "Pid must be provided" });
+      return;
+    }
+    // regex check
+    if (!pid.match(/^[0-9]+$/)) {
+      res.status(400).json({ error: "Invalid pid: " + pid });
+      return;
+    }
+    const product = await getProductByPid(parseInt(pid));
+    if (!product || product.length === 0) {
+      res.status(404).json({ error: "Product not found" });
+      return;
+    }
+    res.json(product);
   })
 );
 
