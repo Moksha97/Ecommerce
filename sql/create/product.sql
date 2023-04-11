@@ -1,7 +1,7 @@
 CREATE TABLE product
 (
     pid       INT PRIMARY KEY AUTO_INCREMENT,
-    pname     VARCHAR(50),
-    pdesc     VARCHAR(200),
-    pcategory ENUM("FASHION", "HOME", "TOYS", "HEALTH", "ELECTRONICS")
+    pname     VARCHAR(50) NOT NULL,
+    pdesc     VARCHAR(200) NOT NULL,
+    pcategory ENUM("FASHION", "HOME", "TOYS", "HEALTH", "ELECTRONICS") NOT NULL
 );
