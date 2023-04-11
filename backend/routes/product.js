@@ -188,7 +188,11 @@ router.post(
       products.push(product);
     }
 
-    res.json(products);
+    var response = {};
+    response.total = 0;
+    response.products = products;
+
+    res.json(response);
   })
 );
 
