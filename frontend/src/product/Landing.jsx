@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Landing() {
+function ProductLanding() {
   return (
     <div>
       <h1>Welcome to the product landing page</h1>
@@ -11,4 +11,4 @@ function Landing() {
   );
 }
 
-export default Landing;
+export default ProductLanding;

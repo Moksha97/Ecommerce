@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axios from "../httpreq";
+import axios from "../utils/httpreq";
 // import { passwordcheck } from "../utils/passwordcheck";
 
 // signup page with a error handling

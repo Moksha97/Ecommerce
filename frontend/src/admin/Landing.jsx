@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Landing() {
+function AdminLanding() {
   return (
     <div>
       <h1>Welcome to the admin landing page</h1>
@@ -10,4 +10,4 @@ function Landing() {
   );
 }
 
-export default Landing;
+export default AdminLanding;

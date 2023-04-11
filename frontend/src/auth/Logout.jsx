@@ -1,14 +1,12 @@
-import { Navigate } from "react-router-dom";
-import React from "react";
-import axios from "../httpreq";
+import ax from "../utils/httpreq";
 
 function Logout() {
-  async function logoutapi() {
-    await axios.get("/logout");
+  async function logout() {
+    await ax.get("/logout");
+    window.location.href = "/login";
   }
 
-  logoutapi();
-  return <Navigate to="/login" />;
+  logout().then();
 }
 
 export default Logout;
