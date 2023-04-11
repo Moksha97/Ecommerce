@@ -1,7 +1,7 @@
 CREATE TABLE `order`
 (
     oid       INT PRIMARY KEY,
-    status    VARCHAR(20),
+    status    ENUM("PLACED", "PACKED", "INTRANSIT", "DELIVERED", "CANCELED"),
     timestamp DATETIME,
     username  varchar(40),
     aid       INT,
