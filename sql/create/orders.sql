@@ -1,6 +1,6 @@
 CREATE TABLE `order`
 (
-    oid       INT PRIMARY KEY,
+    oid       INT PRIMARY KEY AUTO_INCREMENT,
     status    ENUM("PLACED", "PACKED", "INTRANSIT", "DELIVERED", "CANCELED"),
     timestamp DATETIME,
     username  varchar(40),
