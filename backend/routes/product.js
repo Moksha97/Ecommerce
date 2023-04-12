@@ -293,7 +293,7 @@ router.get(
       res.status(404).json({ error: "Product not found" });
       return;
     }
-    res.json(product);
+    res.json(product[0]);
   })
 );
 
