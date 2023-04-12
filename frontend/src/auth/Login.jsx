@@ -140,7 +140,7 @@ const Login = () => {
                   </Button>
                 </Form.Item>
                 <p className="text-muted text-center">
-                  Don't have an account?{" "}
+                  Do not have an account?{" "}
                   <Link to="/signup" className="text-dark font-bold">
                     Sign Up
                   </Link>
