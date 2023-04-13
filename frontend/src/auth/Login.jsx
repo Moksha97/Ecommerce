@@ -41,7 +41,7 @@ const Login = () => {
       if (data.isadmin === 1) {
         window.location.href = "/admin";
       } else {
-        window.location.href = "/users";
+        window.location.href = "/";
       }
     }
   };

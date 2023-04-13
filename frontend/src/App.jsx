@@ -5,6 +5,7 @@ import AdminLanding from "./pages/AdminLanding";
 import Login from "./auth/Login";
 import Logout from "./auth/Logout";
 import Signup from "./auth/Signup";
+import Product from "./pages/Product";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route exact path="/admin" element={<AdminLanding />} />
           <Route exact path="/logout" element={<Logout />} />
           <Route exact path="/signup" element={<Signup />} />
+          <Route exact path="/product/:id" element={<Product />} />
         </Routes>
       </Router>
     </div>
