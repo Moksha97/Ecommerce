@@ -27,7 +27,7 @@ const Login = () => {
       username: values.email,
       password: values.password,
     });
-    console.log(res);
+    // console.log(res);
     if (res.status !== 200) {
       const { response } = res;
       api.error({
@@ -37,7 +37,7 @@ const Login = () => {
       });
     } else {
       const { data } = res;
-      console.log(data);
+      // console.log(data);
       if (data.isadmin === 1) {
         window.location.href = "/admin";
       } else {
@@ -53,10 +53,7 @@ const Login = () => {
   return (
     <>
       {contextHolder}
-      <Layout
-        className="layout-default layout-signin"
-        style={{ height: "100%" }}
-      >
+      <Layout className="layout-default" style={{ height: "100%" }}>
         <AppHeader />
         <Content className="signin">
           <Row gutter={[24, 0]} justify="center">

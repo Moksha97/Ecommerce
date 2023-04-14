@@ -14,10 +14,12 @@ const AppHeader = () => {
   return (
     <Header>
       <div className="header-col header-brand">
-        <h5 style={{ fontSize: "2rem" }}>
-          <span style={{ color: "#0076be" }}>My</span>
-          <span style={{ color: "#48bf91" }}>Shop</span>
-        </h5>
+        <Link to={"/"}>
+          <h5 style={{ fontSize: "2rem" }}>
+            <span style={{ color: "#0076be" }}>My</span>
+            <span style={{ color: "#48bf91" }}>Shop</span>
+          </h5>
+        </Link>
       </div>
       <div className="header-col header-nav">
         <Menu
@@ -27,22 +29,17 @@ const AppHeader = () => {
         >
           <Menu.Item key="1">
             <Link to="/">
-              <span>Home</span>
+              <span style={{ color: "white" }}>Home</span>
             </Link>
           </Menu.Item>
-          {/*<Menu.Item key="2">*/}
-          {/*  <Link to="/profile">*/}
-          {/*    <span>Profile</span>*/}
-          {/*  </Link>*/}
-          {/*</Menu.Item>*/}
           <Menu.Item key="2">
             <Link to="/login">
-              <span>Login</span>
+              <span style={{ color: "white" }}>Login</span>
             </Link>
           </Menu.Item>
           <Menu.Item key="3">
             <Link to="/signup">
-              <span>Sign up</span>
+              <span style={{ color: "white" }}>Sign up</span>
             </Link>
           </Menu.Item>
         </Menu>
