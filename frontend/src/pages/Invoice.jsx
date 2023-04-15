@@ -1,14 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Button, Layout, Menu, Input } from "antd";
-import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import { Layout } from "antd";
 import { Row, Col } from "antd";
 import AppHeader from "./AppHeader";
 import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
-
-const { Header } = Layout;
-const { Search } = Input;
 
 const Invoice = () => {
   return (

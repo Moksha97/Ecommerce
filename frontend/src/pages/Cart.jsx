@@ -1,15 +1,10 @@
 import React from "react";
-// import { Link } from "react-router-dom";
 import { Button, Card, Layout } from "antd";
-// import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import { Col, Row, Divider } from "antd";
 import AppHeader from "./AppHeader";
 import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
 import AppFooter from "./AppFooter";
-
-// const { Header } = Layout;
-// const { Search } = Input;
 
 const Cart = () => {
   return (
