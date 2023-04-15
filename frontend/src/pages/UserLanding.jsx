@@ -4,7 +4,7 @@ import { Button, Card, Col, Layout, Rate, Row } from "antd";
 import AppFooter from "./AppFooter";
 import { Link } from "react-router-dom";
 import Categories from "../components/Categories";
-import ax from "../utils/httpreq";
+// import ax from "../utils/httpreq";
 
 const { Content } = Layout;
 
@@ -381,77 +381,76 @@ function UserLanding() {
     };
   });
   // console.log(parsedProducts);
-  ax.get("/").then((res) => {
-    console.log(res.data);
-  });
+  // ax.get("/").then((res) => {
+  //   console.log(res.data);
+  // });
   return (
     <>
-      <Layout className="layout-default" style={{ height: "100%" }}>
+      <Layout
+        className="layout-default layout-signin"
+        style={{ height: "100%" }}
+      >
         <AppHeader />
         <Categories />
-        <Content>
+        <Content style={{ paddingBottom: "100px" }}>
           <Row
             gutter={[24, 0]}
             justify="left"
             style={{ marginLeft: "50px", marginRight: "50px" }}
           >
-            {parsedProducts.map((product, index) => {
-              return (
-                <Col
-                  key={index}
-                  xs={{ span: 24, offset: 0 }}
-                  md={{ span: 12, offset: 0 }}
-                  lg={{ span: 6, offset: 0 }}
-                >
-                  <Card
-                    bordered={true}
-                    cover={
-                      <img
-                        alt="product img"
-                        src={`/img/image-${index + 1}.jpg`}
-                      />
-                    }
-                    style={{ marginBottom: "12px" }}
-                  >
-                    <div className="card-tag" style={{ fontSize: 21 }}>
-                      <Link to={`product/${product.pid}`}>{product.pname}</Link>
-                    </div>
-                    <h3 style={{ margin: 0 }}>
-                      US $ {product.option.finalPrice}
-                    </h3>
-                    {product.option.discount > 0 ? (
-                      <>
-                        <p>
-                          <strike>List: {product.option.price}</strike>
-                          <b
-                            style={{ paddingLeft: "10px", color: "orangered" }}
-                          >
-                            {product.option.discount * 100}% OFF
-                          </b>
-                        </p>
-                      </>
-                    ) : (
-                      <p>List: {product.option.price}</p>
-                    )}
-
-                    <Rate
-                      allowHalf
-                      disabled
-                      value={product.rating}
-                      style={{ marginBottom: "6px" }}
+            {parsedProducts.map((product, index) => (
+              <Col
+                key={index}
+                xs={{ span: 24, offset: 0 }}
+                md={{ span: 12, offset: 0 }}
+                lg={{ span: 6, offset: 0 }}
+              >
+                <Card
+                  bordered={true}
+                  cover={
+                    <img
+                      alt="product img"
+                      src={`/img/image-${index + 1}.jpg`}
                     />
-                    <Row gutter={[6, 0]} className="card-footer">
-                      <Col span={8}>
-                        <Button type="primary">BUY NOW</Button>
-                      </Col>
-                      <Col span={8}>
-                        <Button type="button">ADD TO CART</Button>
-                      </Col>
-                    </Row>
-                  </Card>
-                </Col>
-              );
-            })}
+                  }
+                  style={{ marginBottom: "12px" }}
+                >
+                  <div className="card-tag" style={{ fontSize: 21 }}>
+                    <Link to={`product/${product.pid}`}>{product.pname}</Link>
+                  </div>
+                  <h3 style={{ margin: 0 }}>
+                    US $ {product.option.finalPrice}
+                  </h3>
+                  {product.option.discount > 0 ? (
+                    <>
+                      <p>
+                        <strike>List: {product.option.price}</strike>
+                        <b style={{ paddingLeft: "10px", color: "orangered" }}>
+                          {product.option.discount * 100}% OFF
+                        </b>
+                      </p>
+                    </>
+                  ) : (
+                    <p>List: {product.option.price}</p>
+                  )}
+
+                  <Rate
+                    allowHalf
+                    disabled
+                    value={product.rating}
+                    style={{ marginBottom: "6px" }}
+                  />
+                  <Row gutter={[6, 0]} className="card-footer">
+                    <Col span={8}>
+                      <Button type="primary">BUY NOW</Button>
+                    </Col>
+                    <Col span={8}>
+                      <Button type="button">ADD TO CART</Button>
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
+            ))}
           </Row>
         </Content>
         <AppFooter />

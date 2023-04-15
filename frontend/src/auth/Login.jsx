@@ -53,7 +53,10 @@ const Login = () => {
   return (
     <>
       {contextHolder}
-      <Layout className="layout-default" style={{ height: "100%" }}>
+      <Layout
+        className="layout-default layout-signin"
+        style={{ height: "100%" }}
+      >
         <AppHeader />
         <Content className="signin">
           <Row gutter={[24, 0]} justify="center">
