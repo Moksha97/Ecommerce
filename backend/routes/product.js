@@ -87,6 +87,14 @@ async function getProductsByPids(pids) {
     if (product.pname === null) {
       continue;
     }
+    if (product.options.length !== 0) {
+      // sort options by price - discount * price (lowest to highest)
+      product.options.sort(function (a, b) {
+        return (
+          a.price - a.discount * a.price - (b.price - b.discount * b.price)
+        );
+      });
+    }
     products.push(product);
   }
   return products;
@@ -228,7 +236,7 @@ router.post(
 
     // query builder
     var filter_query =
-      "SELECT best.pid FROM (SELECT pid, min(price) as bestprice, min(discount) as bestdiscount FROM inventory WHERE ";
+      "SELECT best.pid FROM (SELECT pid, min(price - price * discount) as bestprice, min(discount) as bestdiscount FROM inventory WHERE ";
     if (!include_out_of_stock) {
       filter_query += "quantity > 0 AND ";
     }
