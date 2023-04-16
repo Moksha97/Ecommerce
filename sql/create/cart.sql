@@ -1,7 +1,7 @@
 CREATE TABLE cart
 (
-    pid      INT,
-    sid      INT,
+    pid      INT NOT NULL,
+    sid      INT NOT NULL,
     username VARCHAR(40),
     quantity INT NOT NULL,
     PRIMARY KEY cid (username, pid, sid),

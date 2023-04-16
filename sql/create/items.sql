@@ -1,8 +1,8 @@
 CREATE TABLE items
 (
-    pid      INT,
-    oid      INT,
-    sid      INT,
+    pid      INT NOT NULL,
+    oid      INT NOT NULL,
+    sid      INT NOT NULL,
     price    DECIMAL(10, 2) NOT NULL,
     quantity INT NOT NULL,
     PRIMARY KEY itemsid (pid, sid, oid),

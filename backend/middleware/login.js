@@ -9,7 +9,7 @@ async function verifyUser(req, res) {
   var username = req.body.username;
   var password = req.body.password;
   var sql =
-    "SELECT username, isadmin  FROM users WHERE username = ? AND password = ?";
+    "SELECT username, isadmin  FROM user WHERE username = ? AND password = ?";
   var params = [username, password];
   const [result] = await db.query(sql, params);
   if (result.length > 0) {

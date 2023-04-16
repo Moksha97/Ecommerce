@@ -1,7 +1,7 @@
 CREATE TABLE inventory
 (
-    pid      INT,
-    sid      INT,
+    pid      INT NOT NULL,
+    sid      INT NOT NULL,
     quantity INT NOT NULL,
     price    DECIMAL(10, 2) NOT NULL,
     discount DECIMAL(5, 2) NOT NULL,

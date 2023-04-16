@@ -1,7 +1,9 @@
 CREATE TABLE bankaccount
 (
-    accountnumber VARCHAR(10) PRIMARY KEY,
+    accountid     INT         PRIMARY KEY AUTO_INCREMENT,
+    accountnumber VARCHAR(10) NOT NULL,
     branchcode    VARCHAR(10) NOT NULL,
     bank          VARCHAR(50) NOT NULL,
-    routingnumber VARCHAR(20) NOT NULL
+    routingnumber VARCHAR(20) NOT NULL,
+    isdeleted     BOOLEAN     NOT NULL DEFAULT FALSE
 );

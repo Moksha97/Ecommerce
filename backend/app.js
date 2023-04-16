@@ -10,9 +10,10 @@ var verify = require("./middleware/verify");
 var login = require("./middleware/login");
 var logout = require("./middleware/logout");
 var signup = require("./middleware/signup");
-var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var productRouter = require("./routes/product");
+var accountsRouter = require("./routes/accounts");
+var addressRouter = require("./routes/address");
 
 var app = express();
 
@@ -44,11 +45,11 @@ app.use("/product", productRouter);
 // Authentication Middleware
 app.use(auth);
 
-app.use("/", indexRouter);
-
 // Authenticated Routes
 // User Routes
 app.use("/users", usersRouter);
+app.use("/accounts", accountsRouter);
+app.use("/address", addressRouter);
 
 // Admin Routes
 app.use(admin);

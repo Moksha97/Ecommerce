@@ -1,8 +1,8 @@
 CREATE TABLE userbank
 (
-    accountnumber VARCHAR(10),
-    username      VARCHAR(40),
-    primary key userbankid (accountnumber, username),
-    FOREIGN KEY (accountnumber) REFERENCES bankaccount (accountnumber),
+    accountid     INT NOT NULL,
+    username      VARCHAR(40) NOT NULL,
+    primary key userbankid (accountid, username),
+    FOREIGN KEY (accountid) REFERENCES bankaccount (accountid),
     FOREIGN KEY (username) REFERENCES user (username)
 );
