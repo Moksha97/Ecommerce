@@ -8,9 +8,9 @@ import axios from "../utils/httpreq";
 function Signup() {
   const navigate = useNavigate();
 
-  async function signupapi(username, password, fname, lname) {
+  async function signupapi(username, password, fname, lname, phone) {
     // check if all fields are filled
-    if (username === "" || password === "" || fname === "" || lname === "") {
+    if (username === "" || password === "" || fname === "" || lname === "" || phone === "") {
       alert("Please fill in all fields");
       return;
     }
@@ -20,6 +20,7 @@ function Signup() {
       password: password,
       fname: fname,
       lname: lname,
+      phone: phone,
     });
 
     if (data.error) {
@@ -37,6 +38,7 @@ function Signup() {
         <input type="password" id="password" placeholder="password" />
         <input type="text" id="fname" placeholder="first name" />
         <input type="text" id="lname" placeholder="last name" />
+        <input type="phone" id="phone" placeholder="phone number" />
         <button
           type="button"
           onClick={() =>
@@ -44,7 +46,8 @@ function Signup() {
               document.getElementById("username").value,
               document.getElementById("password").value,
               document.getElementById("fname").value,
-              document.getElementById("lname").value
+              document.getElementById("lname").value,
+              document.getElementById("phone").value
             )
           }
         >

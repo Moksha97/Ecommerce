@@ -10,9 +10,10 @@ async function addUser(req, res) {
   var password = req.body.password;
   var fname = req.body.fname;
   var lname = req.body.lname;
+  var phone = req.body.phone;
   var sql =
-    "INSERT INTO user (username, password, fname, lname) VALUES (?, ?, ?, ?)";
-  var params = [username, password, fname, lname];
+    "INSERT INTO user (username, password, fname, lname, phone) VALUES (?, ?, ?, ?, ?)";
+  var params = [username, password, fname, lname, phone];
 
   try {
     var [result] = await db.query(sql, params);
