@@ -3,6 +3,15 @@ var router = express.Router();
 var db = require("../database/conn");
 var ash = require ("express-async-handler");
 
+
+// common get cart function to reuse
+async function getCart(username) {
+    const [rows] = await db.query(
+        "select c.pid, p.pname, c.sid, c.username, c.quantity, c.quantity * i.price * (1-i.discount) as totalprice from cart c, product p, inventory i where c.pid = p.pid and c.pid = i.pid and c.sid = i.sid and c.username = ?",
+        [username]);
+    return rows;
+}
+
 // add a new item to the cart
 router.post("/addtocart",
     ash(async (req, res) => {
@@ -38,7 +47,7 @@ router.post("/addtocart",
             res.status(500).json({ error: "Unable to insert item into cart" });
             return;
         }
-        res.json({ message: "Item added to cart" });
+        res.json({ message: "Item added to cart succesfully" });
     })
 );
 
@@ -47,12 +56,9 @@ router.get("/getcart",
     ash(async (req, res) => {
         const username = req.username;
         // select productname, price and discount as well
-        const [rows] = await db.query(
-            "select c.pid, p.pname, c.sid, c.username, c.quantity, c.quantity * i.price * (1-i.discount) as price, i.discount from cart as c join inventory as i on c.pid = i.pid join product as p on p.pid = i.pid where c.username = ?",
-            [username]);
+        const rows = await getCart(username);
         if(rows.length === 0) {
-            res.status(404).json({ error: "Cart is empty" });
-            return;
+            res.json([]);
         }
         res.json(rows);
     })
@@ -107,9 +113,7 @@ router.post("/modifycart",
             }
         }
         // get the updated cart
-        const [updated_cart_row] = await db.query(
-            "select c.pid, p.pname, c.sid, c.username, c.quantity, c.quantity * i.price * (1-i.discount) as price, i.discount from cart as c join inventory as i on c.pid = i.pid join product as p on p.pid = i.pid where c.username = ? and c.pid = ? and c.sid = ?",
-            [username, pid, sid]);
+        const updated_cart_row = await getCart(username);
         res.json(updated_cart_row);
     })
 );
