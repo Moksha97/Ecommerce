@@ -18,7 +18,7 @@ class AppHeader extends Component {
   }
 
   componentDidMount = async () => {
-    let defaultLinks = [
+    let defaultLinksIfLoggedIn = [
       {
         key: "home",
         label: "Home",
@@ -53,7 +53,13 @@ class AppHeader extends Component {
         danger: true,
       },
     ];
-
+    let defaultLinksIfNotLoggedIn = [
+      {
+        key: "home",
+        label: "Home",
+        link: "/",
+      },
+    ];
     let linksIfNotLoggedIn = [
       {
         key: "login",
@@ -71,7 +77,7 @@ class AppHeader extends Component {
     console.log(res);
     if (res.status !== 200) {
       this.setState({
-        defaultLinks: defaultLinks,
+        defaultLinks: defaultLinksIfNotLoggedIn,
         links: linksIfNotLoggedIn,
         loggedIn: false,
       });
@@ -80,7 +86,7 @@ class AppHeader extends Component {
       if (data.length !== 0) {
         let user = data[0];
         this.setState({
-          defaultLinks: defaultLinks,
+          defaultLinks: defaultLinksIfLoggedIn,
           links: linksIfLoggedIn,
           fullName: user.fname + " " + user.lname,
           loggedIn: true,
@@ -96,7 +102,7 @@ class AppHeader extends Component {
       <Header
         style={{
           position: "fixed",
-          zIndex: 2,
+          zIndex: 2000,
           width: "100%",
         }}
       >
@@ -108,24 +114,25 @@ class AppHeader extends Component {
             </h5>
           </Link>
         </div>
-        <Form
-          onFinish={onSearch ? onSearch : () => {}}
-          style={{ paddingTop: "8px", width: "1000px" }}
-        >
-          <Form.Item name="search">
-            <Input
-              bordered={false}
-              placeholder="Search..."
-              allowClear
-              style={{
-                alignSelf: "center",
-                marginLeft: "50px",
-                backgroundColor: "#f0f2f5",
-              }}
-            />
-          </Form.Item>
-        </Form>
-
+        <div className="header-col header-nav">
+          <Form
+            onFinish={onSearch ? onSearch : () => {}}
+            style={{ paddingTop: "8px" }}
+          >
+            <Form.Item name="search">
+              <Input
+                bordered={false}
+                placeholder="Search..."
+                allowClear
+                style={{
+                  alignSelf: "center",
+                  marginLeft: "50px",
+                  backgroundColor: "#f0f2f5",
+                }}
+              />
+            </Form.Item>
+          </Form>
+        </div>
         <div className="header-col header-nav">
           <Menu
             mode="horizontal"
