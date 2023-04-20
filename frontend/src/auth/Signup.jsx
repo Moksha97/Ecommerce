@@ -26,7 +26,6 @@ class Signup extends Component {
       lname: lname,
       phone: phone,
     });
-    console.log(res);
     if (res.status !== 200) {
       const { response } = res;
       notification.error({
@@ -36,7 +35,6 @@ class Signup extends Component {
       });
     } else {
       const { data } = res;
-      console.log(data);
       if (data.isadmin === 1) {
         window.location.href = "/admin";
       } else {

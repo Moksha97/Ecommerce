@@ -102,7 +102,7 @@ class AppHeader extends Component {
       <Header
         style={{
           position: "fixed",
-          zIndex: 2000,
+          zIndex: 2,
           width: "100%",
         }}
       >

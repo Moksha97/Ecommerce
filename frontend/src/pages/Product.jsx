@@ -30,7 +30,7 @@ class Product extends Component {
     };
   }
 
-  componentDidMount = async () => {
+  getProduct = async () => {
     const { notification } = this.props;
     const { id } = this.props.params;
 
@@ -75,11 +75,38 @@ class Product extends Component {
     }
   };
 
+  componentDidMount = async () => {
+    await this.getProduct();
+  };
+
   onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
   onFinish = async (values) => {
     console.log("Success:", values);
+    const { notification } = this.props;
+    const { quantity, sid } = values;
+    const { id } = this.props.params;
+    const res = await ax.post("/cart/addtocart", {
+      quantity: quantity,
+      sid: sid,
+      pid: id,
+    });
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success`,
+        description: "Item added to cart",
+        placement: "topRight",
+      });
+      await this.getProduct();
+    }
   };
 
   sellerChanged = (value) => {
@@ -176,14 +203,13 @@ class Product extends Component {
                                 addonAfter={`${option.quantity} available`}
                                 max={option.quantity}
                                 min={1}
-                                value={1}
                               />
                             </Space>
                           </Form.Item>
                           <Form.Item
                             className=""
                             label=""
-                            name="seller"
+                            name="sid"
                             rules={[
                               {
                                 required: true,
