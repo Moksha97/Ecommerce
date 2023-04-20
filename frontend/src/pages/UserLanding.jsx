@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AppHeader from "../components/AppHeader";
-import { Button, Card, Col, Layout, Rate, Row } from "antd";
+import { Button, Card, Checkbox, Col, Layout, Rate, Row } from "antd";
 import AppFooter from "../components/AppFooter";
 import { Link } from "react-router-dom";
 import Categories from "../components/Categories";
@@ -16,6 +16,8 @@ class UserLanding extends Component {
       products: [],
       categories: [],
       search: "",
+      showSidebar: true,
+      allCategories: [],
     };
   }
 
@@ -33,7 +35,7 @@ class UserLanding extends Component {
       order: "ASC",
       include_out_of_stock: true,
     };
-    const res = await ax.post("/product", request);
+    let res = await ax.post("/product", request);
     if (res.status !== 200) {
       const { response } = res;
       notification.error({
@@ -53,6 +55,18 @@ class UserLanding extends Component {
         products: data.products,
       });
     }
+
+    res = await ax.get("/product/category");
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      this.setState({ allCategories: res.data });
+    }
   };
 
   componentDidMount = async () => {
@@ -60,7 +74,7 @@ class UserLanding extends Component {
   };
 
   categorySelected = async (data) => {
-    await this.setState({ categories: [data.key] });
+    await this.setState({ categories: [data.key], showSidebar: true });
     await this.fetchProductData();
   };
 
@@ -69,9 +83,15 @@ class UserLanding extends Component {
     await this.fetchProductData();
   };
 
+  changeCategories = async (value) => {
+    await this.setState({ categories: value });
+    await this.fetchProductData();
+  };
+
   render = () => {
     const { notification } = this.props;
-    const { products } = this.state;
+    const { products, showSidebar, allCategories, categories } = this.state;
+    console.log("categories", categories);
     let parsedProducts = products.map((product) => {
       let options = product.options.map((option) => {
         let price = Math.round(parseFloat(option.price) * 100) / 100;
@@ -95,82 +115,104 @@ class UserLanding extends Component {
     });
 
     return (
-      <>
-        <Layout
-          className="layout-default layout-signin"
-          style={{ height: "100%" }}
-        >
-          <AppHeader onSearch={this.onSearch} />
-          <Categories
-            notification={notification}
-            selected={this.categorySelected}
-          />
-          <Content style={{ paddingBottom: "100px" }}>
-            <Row
-              gutter={[24, 0]}
-              justify="left"
-              style={{ marginLeft: "50px", marginRight: "50px" }}
-            >
-              {parsedProducts.map((product, index) => (
-                <Col
-                  key={index}
-                  xs={{ span: 24, offset: 0 }}
-                  md={{ span: 12, offset: 0 }}
-                  lg={{ span: 6, offset: 0 }}
-                >
-                  <Card
-                    bordered={true}
-                    cover={
-                      <img
-                        alt="product img"
-                        src={`/img/image-${index + 1}.jpg`}
-                      />
-                    }
-                    style={{ marginBottom: "12px" }}
+      <Layout
+        className="layout-default layout-signin"
+        style={{ height: "100%" }}
+      >
+        <AppHeader onSearch={this.onSearch} />
+        <Categories
+          notification={notification}
+          selected={this.categorySelected}
+        />
+        <Content style={{ paddingBottom: "100px" }}>
+          <Row>
+            <Col span={showSidebar ? 4 : 0} style={{ paddingLeft: "50px" }}>
+              <h2 style={{ marginTop: 0 }}>Category</h2>
+              <Checkbox.Group
+                value={categories}
+                onChange={this.changeCategories}
+              >
+                <Row>
+                  {allCategories.map((category) => (
+                    <Col key={category.code} span={24}>
+                      <Checkbox value={category.code}>{category.name}</Checkbox>
+                    </Col>
+                  ))}
+                </Row>
+              </Checkbox.Group>
+            </Col>
+            <Col span={showSidebar ? 20 : 24}>
+              <Row
+                gutter={[24, 0]}
+                justify="left"
+                style={{ marginLeft: "50px", marginRight: "50px" }}
+              >
+                {parsedProducts.map((product, index) => (
+                  <Col
+                    key={index}
+                    xs={{ span: 24, offset: 0 }}
+                    md={{ span: 12, offset: 0 }}
+                    lg={{ span: 6, offset: 0 }}
                   >
-                    <div className="card-tag" style={{ fontSize: 21 }}>
-                      <Link to={`product/${product.pid}`}>{product.pname}</Link>
-                    </div>
-                    <h3 style={{ margin: 0 }}>
-                      US $ {product.option.finalPrice}
-                    </h3>
-                    {product.option.discount > 0 ? (
-                      <>
-                        <p>
-                          <strike>List: {product.option.price}</strike>
-                          <b
-                            style={{ paddingLeft: "10px", color: "orangered" }}
-                          >
-                            {product.option.discount * 100}% OFF
-                          </b>
-                        </p>
-                      </>
-                    ) : (
-                      <p>List: {product.option.price}</p>
-                    )}
+                    <Card
+                      bordered={true}
+                      cover={
+                        <img
+                          alt="product img"
+                          src={`/img/image-${index + 1}.jpg`}
+                        />
+                      }
+                      style={{ marginBottom: "12px" }}
+                    >
+                      <div className="card-tag" style={{ fontSize: 21 }}>
+                        <Link to={`product/${product.pid}`}>
+                          {product.pname}
+                        </Link>
+                      </div>
+                      <h3 style={{ margin: 0 }}>
+                        US $ {product.option.finalPrice}
+                      </h3>
+                      {product.option.discount > 0 ? (
+                        <>
+                          <p>
+                            <strike>List: {product.option.price}</strike>
+                            <b
+                              style={{
+                                paddingLeft: "10px",
+                                color: "orangered",
+                              }}
+                            >
+                              {product.option.discount * 100}% OFF
+                            </b>
+                          </p>
+                        </>
+                      ) : (
+                        <p>List: {product.option.price}</p>
+                      )}
 
-                    <Rate
-                      allowHalf
-                      disabled
-                      value={product.rating}
-                      style={{ marginBottom: "6px" }}
-                    />
-                    <Row gutter={[6, 0]} className="card-footer">
-                      <Col span={8}>
-                        <Button type="primary">BUY NOW</Button>
-                      </Col>
-                      <Col span={8}>
-                        <Button type="button">ADD TO CART</Button>
-                      </Col>
-                    </Row>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          </Content>
-          <AppFooter />
-        </Layout>
-      </>
+                      <Rate
+                        allowHalf
+                        disabled
+                        value={product.rating}
+                        style={{ marginBottom: "6px" }}
+                      />
+                      <Row gutter={[6, 0]} className="card-footer">
+                        <Col span={8}>
+                          <Button type="primary">BUY NOW</Button>
+                        </Col>
+                        <Col span={8}>
+                          <Button type="button">ADD TO CART</Button>
+                        </Col>
+                      </Row>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </Col>
+          </Row>
+        </Content>
+        <AppFooter />
+      </Layout>
     );
   };
 }
