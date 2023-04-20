@@ -819,9 +819,9 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
 
 .left-nav {
   /* height: 435px;
-      overflow: hidden;
-      overflow-y: auto;
-      padding-right: 15px; */
+        overflow: hidden;
+        overflow-y: auto;
+        padding-right: 15px; */
 
   margin-top: 15px;
 }
@@ -1302,7 +1302,6 @@ span.blue {
 }
 
 .ant-muse span {
-  color: #8c8c8c;
   font-weight: 600;
 }
 
@@ -1851,11 +1850,11 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   }
 
   /* .bar-chart {
-        max-width: 438px;
-      } */
+          max-width: 438px;
+        } */
   /* .full-width {
-        max-width: 658px;
-      } */
+          max-width: 658px;
+        } */
 }
 
 @media (max-width: 1024px) {
@@ -1868,8 +1867,8 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   }
 
   /* .ant-col.mobile-24 {
-        margin-bottom: 24px;
-      } */
+          margin-bottom: 24px;
+        } */
 }
 
 body {

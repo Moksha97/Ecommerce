@@ -28,7 +28,7 @@ class UserLanding extends Component {
       products: [],
       categories: [],
       search: "",
-      showSidebar: true,
+      showSidebar: false,
       allCategories: [],
       order_by: "price",
       order: "ASC",

@@ -1,4 +1,6 @@
-import { useParams } from "react-router-dom";
+import React, { Component } from "react";
+import AppFooter from "../components/AppFooter";
+import Categories from "../components/Categories";
 import {
   Button,
   Card,
@@ -13,83 +15,83 @@ import {
   Space,
 } from "antd";
 import AppHeader from "../components/AppHeader";
-import React, { useState } from "react";
-import AppFooter from "../components/AppFooter";
-import Categories from "../components/Categories";
+import withRouter from "../components/withRouter";
+import ax from "../utils/httpreq";
 
 const { Content } = Layout;
 
-const Product = () => {
-  const { id } = useParams();
-  console.log(id);
-  let product = {
-    pid: 1,
-    pname: "T-shirt",
-    pcategory: "FASHION",
-    rating: "4.2",
-    pdesc: "100% cotton, available in various colors and sizes",
-    options: [
-      {
-        sid: 26,
-        sname: "John Doe 1",
-        price: "99.99",
-        discount: "0.05",
-        quantity: 10,
-      },
-      {
-        sid: 27,
-        sname: "John Doe 2",
-        price: "999.99",
-        discount: "0.5",
-        quantity: 10,
-      },
-      {
-        sid: 28,
-        sname: "John Doe 3",
-        price: "999.99",
-        discount: "0.05",
-        quantity: 10,
-      },
-      {
-        sid: 29,
-        sname: "John Doe 4",
-        price: "9999.99",
-        discount: "0.95",
-        quantity: 10,
-      },
-    ],
-  };
-
-  let options = product.options.map((option) => {
-    let price = Math.round(parseFloat(option.price) * 100) / 100;
-    let discount = Math.round(parseFloat(option.discount) * 100) / 100;
-    let finalPrice = Math.round(price * (1 - discount) * 100) / 100;
-    return {
-      ...option,
-      price: price,
-      discount: discount,
-      finalPrice: finalPrice,
+class Product extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      product: {},
+      options: [],
+      option: {},
     };
-  });
-  let selectedOption = 0;
-  let [option, setOption] = useState(options[selectedOption]);
-  product = {
-    ...product,
-    option: option,
-    rating: product.rating ? parseFloat(product.rating) : 0,
+  }
+
+  componentDidMount = async () => {
+    const { notification } = this.props;
+    const { id } = this.props.params;
+
+    let res = await ax.get("/product/" + id);
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+      this.setState({
+        product: {},
+        options: [],
+        option: {},
+      });
+    } else {
+      let product = res.data;
+      product = {
+        ...product,
+        rating: product.rating ? parseFloat(product.rating) : 0,
+      };
+
+      let options = product.options.map((option) => {
+        let price = Math.round(parseFloat(option.price) * 100) / 100;
+        let discount = Math.round(parseFloat(option.discount) * 100) / 100;
+        let finalPrice = Math.round(price * (1 - discount) * 100) / 100;
+        return {
+          ...option,
+          price: price,
+          discount: discount,
+          finalPrice: finalPrice,
+        };
+      });
+
+      let option = {};
+      if (options && options.length > 0) {
+        option = options[0];
+      }
+
+      this.setState({ product: product, options: options, option: option });
+    }
   };
 
-  // console.log(product);
-
-  const onFinishFailed = (errorInfo) => {
+  onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-  const onFinish = async (values) => {
+  onFinish = async (values) => {
     console.log("Success:", values);
   };
 
-  return (
-    <>
+  sellerChanged = (value) => {
+    const { options } = this.state;
+    this.setState({ option: options.find((o) => o.sid === value) });
+  };
+
+  render() {
+    const { product, options, option } = this.state;
+    const { id } = this.props.params;
+
+    return (
       <Layout
         className="layout-default layout-signin"
         style={{ height: "100%" }}
@@ -116,9 +118,17 @@ const Product = () => {
                     lg={12}
                     xl={10}
                     className="col-img"
-                    style={{ backgroundImage: `url(${product.option.image})` }}
                   >
-                    <div className="ant-cret text-right"></div>
+                    <div
+                      style={{
+                        height: 300,
+                        backgroundImage: `url('http://localhost:3002/img/image-${id}.jpg')`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        marginTop: "30px",
+                        borderRadius: "10px",
+                      }}
+                    ></div>
                   </Col>
                   <Col
                     xs={24}
@@ -135,15 +145,16 @@ const Product = () => {
                         <p className="lastweek mb-36">{product.pdesc}</p>
                         <Rate
                           allowHalf
+                          disabled
                           value={product.rating}
-                          style={{ marginBottom: "6px" }}
+                          style={{ marginBottom: "12px" }}
                         />
 
                         <Form
                           layout="vertical"
                           className="row-col"
-                          onFinish={onFinish}
-                          onFinishFailed={onFinishFailed}
+                          onFinish={this.onFinish}
+                          onFinishFailed={this.onFinishFailed}
                         >
                           <Form.Item
                             className=""
@@ -165,6 +176,7 @@ const Product = () => {
                                 addonAfter={`${option.quantity} available`}
                                 max={option.quantity}
                                 min={1}
+                                value={1}
                               />
                             </Space>
                           </Form.Item>
@@ -181,39 +193,34 @@ const Product = () => {
                           >
                             <Select
                               showSearch
-                              onChange={(value) => {
-                                console.log(value);
-                                setOption(
-                                  options.find((option) => option.sid === value)
-                                );
-                              }}
+                              onChange={this.sellerChanged}
                               placeholder="Seller"
                               optionFilterProp="children"
-                              options={product.options.map((option) => {
+                              defaultValue={option.sid}
+                              options={options.map((option) => {
                                 return {
                                   label: option.sname,
                                   value: option.sid,
                                 };
                               })}
                             />
-
-                            <h3>US $ {product.option.finalPrice}</h3>
-                            {product.option.discount > 0 ? (
-                              <>
-                                <p>
-                                  <strike>List: {product.option.price}</strike>
-                                  <b
-                                    style={{
-                                      paddingLeft: "10px",
-                                      color: "orangered",
-                                    }}
-                                  >
-                                    {product.option.discount * 100}% OFF
-                                  </b>
-                                </p>
-                              </>
+                          </Form.Item>
+                          <Form.Item>
+                            <h3>US $ {option.finalPrice}</h3>
+                            {option.discount > 0 ? (
+                              <p>
+                                <strike>List: {option.price}</strike>
+                                <b
+                                  style={{
+                                    paddingLeft: "10px",
+                                    color: "orangered",
+                                  }}
+                                >
+                                  {option.discount * 100}% OFF
+                                </b>
+                              </p>
                             ) : (
-                              <p>List: {product.option.price}</p>
+                              <p>List: {option.price}</p>
                             )}
                           </Form.Item>
                           <Form.Item>
@@ -252,7 +259,11 @@ const Product = () => {
                 <Row gutter={[24, 24]}>
                   {options.map((option, index) => (
                     <Col span={24} key={index}>
-                      <Card className="card-billing-info" bordered="true">
+                      <Card
+                        className="card-billing-info"
+                        bordered="true"
+                        key={index}
+                      >
                         <div className="col-info">
                           <Descriptions title={option.sname}>
                             <Descriptions.Item label="" span={3}>
@@ -290,8 +301,8 @@ const Product = () => {
         </Content>
         <AppFooter />
       </Layout>
-    </>
-  );
-};
+    );
+  }
+}
 
-export default Product;
+export default withRouter(Product);
