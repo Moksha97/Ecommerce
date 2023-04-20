@@ -12,7 +12,7 @@ class Categories extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount = async () => {
     const { notification } = this.props;
 
     const res = await ax.get("/product/category");
@@ -26,9 +26,9 @@ class Categories extends Component {
     } else {
       this.setState({ categories: res.data });
     }
-  }
+  };
 
-  render() {
+  render = () => {
     const { categories } = this.state;
 
     return (
@@ -45,7 +45,7 @@ class Categories extends Component {
         ))}
       </Menu>
     );
-  }
+  };
 }
 
 export default Categories;

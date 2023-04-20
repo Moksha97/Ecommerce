@@ -1,16 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import {
-  Layout,
-  Button,
-  Row,
-  Col,
-  Typography,
-  Form,
-  Input,
-  Radio,
-  notification,
-} from "antd";
+import { Layout, Button, Row, Col, Typography, Form, Input, Radio } from "antd";
 import AppHeader from "../pages/AppHeader";
 import AppFooter from "../pages/AppFooter";
 import ax from "../utils/httpreq";
@@ -18,10 +8,15 @@ import ax from "../utils/httpreq";
 const { Title } = Typography;
 const { Content } = Layout;
 
-const Login = () => {
-  const [api, contextHolder] = notification.useNotification();
+class Login extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-  const onFinish = async (values) => {
+  componentDidMount = async () => {};
+
+  onFinish = async (values) => {
+    const { notification } = this.props;
     console.log("Success:", values);
     const res = await ax.post("/login", {
       username: values.email,
@@ -30,7 +25,7 @@ const Login = () => {
     // console.log(res);
     if (res.status !== 200) {
       const { response } = res;
-      api.error({
+      notification.error({
         message: `Error: ${response.status}`,
         description: response.data.error,
         placement: "topRight",
@@ -46,13 +41,12 @@ const Login = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo) => {
+  onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
-  return (
-    <>
-      {contextHolder}
+  render() {
+    return (
       <Layout
         className="layout-default layout-signin"
         style={{ height: "100%" }}
@@ -74,8 +68,8 @@ const Login = () => {
                 Please sign into your account
               </Title>
               <Form
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
+                onFinish={this.onFinish}
+                onFinishFailed={this.onFinishFailed}
                 layout="vertical"
                 className="row-col"
               >
@@ -151,8 +145,8 @@ const Login = () => {
         </Content>
         <AppFooter />
       </Layout>
-    </>
-  );
-};
+    );
+  }
+}
 
 export default Login;

@@ -20,10 +20,10 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<UserLanding notification={api} />} />
-          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/login" element={<Login notification={api} />} />
           <Route exact path="/admin" element={<AdminLanding />} />
           <Route exact path="/logout" element={<Logout />} />
-          <Route exact path="/signup" element={<Signup />} />
+          <Route exact path="/signup" element={<Signup notification={api} />} />
           <Route exact path="/product/:id" element={<Product />} />
           <Route exact path="/invoice" element={<Invoice />} />
           <Route exact path="/orders" element={<OrderHistory />} />
