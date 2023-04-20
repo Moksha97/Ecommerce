@@ -30,11 +30,12 @@ class Categories extends Component {
 
   render = () => {
     const { categories } = this.state;
-
+    const { selected } = this.props;
     return (
       <Menu
         mode="horizontal"
         style={{ justifyContent: "center", marginTop: "64px" }}
+        onClick={selected ? selected : () => {}}
       >
         {categories.map((category) => (
           <Menu.Item key={category.code}>

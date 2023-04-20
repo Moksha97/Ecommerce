@@ -1,4 +1,4 @@
-import { Button, Dropdown, Input, Layout, Menu, Space } from "antd";
+import { Button, Dropdown, Form, Input, Layout, Menu, Space } from "antd";
 import { Link } from "react-router-dom";
 import React, { Component } from "react";
 import ax from "../utils/httpreq";
@@ -24,22 +24,22 @@ class AppHeader extends Component {
         label: "Home",
         link: "/",
       },
+      {
+        key: "cart",
+        label: "Cart",
+        link: "/cart",
+      },
+      {
+        key: "orders",
+        label: "Orders",
+        link: "/orders",
+      },
     ];
     let linksIfLoggedIn = [
       {
         key: "profile",
         label: <a href="/profile">Profile</a>,
         link: "/profile",
-      },
-      {
-        key: "cart",
-        label: <a href={"/cart"}>Cart</a>,
-        link: "/cart",
-      },
-      {
-        key: "orders",
-        label: <a href={"/orders"}>Orders</a>,
-        link: "/orders",
       },
       {
         key: "invoice",
@@ -91,7 +91,7 @@ class AppHeader extends Component {
 
   render() {
     const { defaultLinks, links, fullName, loggedIn } = this.state;
-
+    const { onSearch } = this.props;
     return (
       <Header
         style={{
@@ -108,17 +108,24 @@ class AppHeader extends Component {
             </h5>
           </Link>
         </div>
-        <Input
-          bordered={false}
-          placeholder="Search..."
-          allowClear
-          /*onSearch={onSearch}*/
-          style={{
-            alignSelf: "center",
-            marginLeft: "50px",
-            backgroundColor: "#f0f2f5",
-          }}
-        />
+        <Form
+          onFinish={onSearch ? onSearch : () => {}}
+          style={{ paddingTop: "8px", width: "1000px" }}
+        >
+          <Form.Item name="search">
+            <Input
+              bordered={false}
+              placeholder="Search..."
+              allowClear
+              style={{
+                alignSelf: "center",
+                marginLeft: "50px",
+                backgroundColor: "#f0f2f5",
+              }}
+            />
+          </Form.Item>
+        </Form>
+
         <div className="header-col header-nav">
           <Menu
             mode="horizontal"
