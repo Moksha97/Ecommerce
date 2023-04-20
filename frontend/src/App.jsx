@@ -10,13 +10,16 @@ import OrderHistory from "./pages/OrderHistory";
 import Invoice from "./pages/Invoice";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
+import { notification } from "antd";
 
 function App() {
+  const [api, contextHolder] = notification.useNotification();
   return (
     <div className="App">
+      {contextHolder}
       <Router>
         <Routes>
-          <Route exact path="/" element={<UserLanding />} />
+          <Route exact path="/" element={<UserLanding notification={api} />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/admin" element={<AdminLanding />} />
           <Route exact path="/logout" element={<Logout />} />

@@ -8,7 +8,8 @@ import Categories from "../components/Categories";
 
 const { Content } = Layout;
 
-function UserLanding() {
+function UserLanding(props) {
+  const { notification } = props;
   let productResponse = {
     total: 2,
     products: [
@@ -391,7 +392,7 @@ function UserLanding() {
         style={{ height: "100%" }}
       >
         <AppHeader />
-        <Categories />
+        <Categories notification={notification} />
         <Content style={{ paddingBottom: "100px" }}>
           <Row
             gutter={[24, 0]}
