@@ -1,7 +1,7 @@
 import React from "react";
-import AppHeader from "./AppHeader";
+import AppHeader from "../components/AppHeader";
 import { Button, Card, Col, Layout, Rate, Row } from "antd";
-import AppFooter from "./AppFooter";
+import AppFooter from "../components/AppFooter";
 import { Link } from "react-router-dom";
 import Categories from "../components/Categories";
 // import ax from "../utils/httpreq";

@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, Card, Layout } from "antd";
 import { Col, Row, Divider } from "antd";
-import AppHeader from "./AppHeader";
+import AppHeader from "../components/AppHeader";
 import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
-import AppFooter from "./AppFooter";
+import AppFooter from "../components/AppFooter";
 
 const Cart = () => {
   return (

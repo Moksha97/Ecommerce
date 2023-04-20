@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Layout } from "antd";
 import { Col, Row, Divider } from "antd";
 import { Popover, Steps } from "antd";
-import AppHeader from "./AppHeader";
+import AppHeader from "../components/AppHeader";
 import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout } from "antd";
 import { Row, Col } from "antd";
-import AppHeader from "./AppHeader";
+import AppHeader from "../components/AppHeader";
 import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
 

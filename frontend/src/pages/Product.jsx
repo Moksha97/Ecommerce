@@ -12,9 +12,9 @@ import {
   Select,
   Space,
 } from "antd";
-import AppHeader from "./AppHeader";
+import AppHeader from "../components/AppHeader";
 import React, { useState } from "react";
-import AppFooter from "./AppFooter";
+import AppFooter from "../components/AppFooter";
 import Categories from "../components/Categories";
 
 const { Content } = Layout;

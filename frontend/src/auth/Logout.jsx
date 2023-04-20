@@ -1,12 +1,22 @@
 import ax from "../utils/httpreq";
+import { Component } from "react";
 
-function Logout() {
-  async function logout() {
-    await ax.get("/logout");
-    window.location.href = "/login";
+class Logout extends Component {
+  constructor(props) {
+    super(props);
   }
 
-  logout().then();
+  componentDidMount = async () => {
+    await this.logout();
+  };
+  logout = async () => {
+    await ax.get("/logout");
+    window.location.href = "/";
+  };
+
+  render = () => {
+    return <></>;
+  };
 }
 
 export default Logout;

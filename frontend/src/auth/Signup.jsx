@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Layout, Button, Row, Col, Typography, Form, Input, Radio } from "antd";
-import AppHeader from "../pages/AppHeader";
-import AppFooter from "../pages/AppFooter";
+import AppHeader from "../components/AppHeader";
+import AppFooter from "../components/AppFooter";
 import ax from "../utils/httpreq";
 
 const { Title } = Typography;

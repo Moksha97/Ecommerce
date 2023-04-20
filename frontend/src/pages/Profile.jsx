@@ -1,8 +1,8 @@
 import React from "react";
 import { Col, Row, Divider, Card } from "antd";
 import { Button, Space, Layout } from "antd";
-import AppFooter from "../pages/AppFooter";
-import AppHeader from "./AppHeader";
+import AppFooter from "../components/AppFooter";
+import AppHeader from "../components/AppHeader";
 import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
 
