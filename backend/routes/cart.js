@@ -13,7 +13,7 @@ async function getCart(username) {
 }
 
 // modify cart functional
-async function updateCart(username, pid, sid, quantity) {
+async function updateCart(username, pid, sid, quantity,res) {
     if (quantity === 0) {
         const [rows] = await db.query(
             "DELETE FROM cart WHERE username = ? AND pid = ? AND sid = ?",
@@ -63,7 +63,7 @@ router.post("/addtocart",
         catch(err) {
             if(err.code === "ER_DUP_ENTRY"){
                 // update the cart
-                await updateCart(username, pid, sid, quantity);
+                await updateCart(username, pid, sid, quantity,res);
             }
         }
         res.json({ message: "Item added to cart succesfully" });
@@ -112,7 +112,7 @@ router.post("/modifycart",
         // if the quantity is 0, delete the item from the cart
 
         // update the quantity of the item in the cart
-        await updateCart(username, pid, sid, quantity);
+        await updateCart(username, pid, sid, quantity,res);
 
         // if (quantity === 0) {
         //     const [rows] = await db.query(
@@ -144,3 +144,4 @@ router.post("/modifycart",
 
 
 module.exports = router;
+module.exports.getCart = getCart;
