@@ -13,9 +13,10 @@ ax.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status === 401) {
-      window.location.href = "/login";
-    }
+    // if (error.response.status === 401) {
+    //   window.location.href = "/login";
+    // }
+    console.log("AXIOS 401", error);
     return error;
   }
 );
@@ -26,9 +27,10 @@ ax.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status === 500) {
-      alert("Internal server error" + error.response.data);
-    }
+    // if (error.response.status === 500) {
+    //   alert("Internal server error" + error.response.data);
+    // }
+    console.log("AXIOS 500", error);
     return error;
   }
 );

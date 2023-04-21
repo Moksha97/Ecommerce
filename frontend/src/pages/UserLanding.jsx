@@ -109,7 +109,7 @@ class UserLanding extends Component {
   };
 
   onSearch = async (value) => {
-    await this.setState({ search: value.search });
+    await this.setState({ search: value.search, showSidebar: true });
     await this.fetchProductData();
   };
 

@@ -74,7 +74,6 @@ class AppHeader extends Component {
     ];
 
     let res = await ax.get("/users/getUser");
-    console.log(res);
     if (res.status !== 200) {
       this.setState({
         defaultLinks: defaultLinksIfNotLoggedIn,

@@ -1,14 +1,54 @@
-import React from "react";
+import React, { Component } from "react";
 import { Button, Card, Layout } from "antd";
 import { Col, Row, Divider } from "antd";
 import AppHeader from "../components/AppHeader";
 import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
 import AppFooter from "../components/AppFooter";
+import ax from "../utils/httpreq";
 
-const Cart = () => {
-  return (
-    <>
+class Cart extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  getCardDetails = async () => {
+    const { notification } = this.props;
+    let res = await ax.get("/users/getUser");
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      const { data } = res;
+      if (data.length !== 0) {
+        let user = data[0];
+        console.log(user);
+      }
+    }
+
+    res = await ax.get("/cart/getCart");
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      console.log(res.data);
+    }
+  };
+
+  componentDidMount = async () => {
+    await this.getCardDetails();
+  };
+
+  render() {
+    return (
       <div>
         <Layout
           className="layout-default layout-signin"
@@ -201,34 +241,49 @@ const Cart = () => {
                   }}
                 >
                   <h2 style={{ alignContent: "Center" }}>Cart Summary</h2>
-                  <Divider Style={{ marginTop: "0px" }} />
+                  <Divider style={{ marginTop: "0px" }} />
                   <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
                     <div>Subtotal</div>
                     <div>US $Price</div>
                   </div>
                   <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
                     <div>Shipping</div>
                     <div>US $Fee</div>
                   </div>
                   <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
                     <div>Discount</div>
                     <div>US $Discount</div>
                   </div>
                   <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
                     <div>Estimated Tax</div>
                     <div>US $Tax</div>
                   </div>
-                  <Divider Style={{ marginTop: "0px" }} />
+                  <Divider style={{ marginTop: "0px" }} />
                   <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
                     <div>
                       <b>Total</b>
@@ -347,8 +402,8 @@ const Cart = () => {
           <AppFooter />
         </Layout>
       </div>
-    </>
-  );
-};
+    );
+  }
+}
 
 export default Cart;
