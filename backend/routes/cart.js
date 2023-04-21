@@ -12,6 +12,27 @@ async function getCart(username) {
     return rows;
 }
 
+// modify cart functional
+async function updateCart(username, pid, sid, quantity) {
+    if (quantity === 0) {
+        const [rows] = await db.query(
+            "DELETE FROM cart WHERE username = ? AND pid = ? AND sid = ?",
+            [username, pid, sid]);
+        if (rows.affectedRows === 0) {
+            res.status(500).json({ error: "Unable to delete item from cart" });
+            return;
+        }
+    } else {
+        const [rows] = await db.query(
+            "UPDATE cart SET quantity = ? WHERE username = ? AND pid = ? AND sid = ?",
+            [quantity, username, pid, sid]);
+        if (rows.affectedRows === 0) {
+            res.status(500).json({ error: "Unable to update item in cart" });
+            return;
+        }
+    }
+}
+
 // add a new item to the cart
 router.post("/addtocart",
     ash(async (req, res) => {
@@ -41,11 +62,9 @@ router.post("/addtocart",
         }
         catch(err) {
             if(err.code === "ER_DUP_ENTRY"){
-                res.status(400).json({ error: "Item already present in the cart" });
-                return;
+                // update the cart
+                await updateCart(username, pid, sid, quantity);
             }
-            res.status(500).json({ error: "Unable to insert item into cart" });
-            return;
         }
         res.json({ message: "Item added to cart succesfully" });
     })
@@ -91,27 +110,31 @@ router.post("/modifycart",
         }
         // update the quantity of the item in the cart
         // if the quantity is 0, delete the item from the cart
-        if (quantity === 0) {
-            const [rows] = await db.query(
-                "DELETE FROM cart WHERE username = ? AND pid = ? AND sid = ?",
-                [username, pid, sid]);
-            if (rows.affectedRows === 0) {
-                res.status(500).json({ error: "Unable to delete item from cart" });
-                return;
-            }
-            else{
-                res.json({ message: "Item deleted from cart" });
-                return;
-            }
-        } else {
-            const [rows] = await db.query(
-                "UPDATE cart SET quantity = ? WHERE username = ? AND pid = ? AND sid = ?",
-                [quantity, username, pid, sid]);
-            if (rows.affectedRows === 0) {
-                res.status(500).json({ error: "Unable to update item in cart" });
-                return;
-            }
-        }
+
+        // update the quantity of the item in the cart
+        await updateCart(username, pid, sid, quantity);
+
+        // if (quantity === 0) {
+        //     const [rows] = await db.query(
+        //         "DELETE FROM cart WHERE username = ? AND pid = ? AND sid = ?",
+        //         [username, pid, sid]);
+        //     if (rows.affectedRows === 0) {
+        //         res.status(500).json({ error: "Unable to delete item from cart" });
+        //         return;
+        //     }
+        //     else{
+        //         res.json({ message: "Item deleted from cart" });
+        //         return;
+        //     }
+        // } else {
+        //     const [rows] = await db.query(
+        //         "UPDATE cart SET quantity = ? WHERE username = ? AND pid = ? AND sid = ?",
+        //         [quantity, username, pid, sid]);
+        //     if (rows.affectedRows === 0) {
+        //         res.status(500).json({ error: "Unable to update item in cart" });
+        //         return;
+        //     }
+        // }
         // get the updated cart
         const updated_cart_row = await getCart(username);
         res.json(updated_cart_row);
