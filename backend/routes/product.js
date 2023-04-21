@@ -236,7 +236,7 @@ router.post(
 
     // query builder
     var filter_query =
-      "SELECT best.pid FROM (SELECT pid, min(price - price * discount) as bestprice, min(discount) as bestdiscount FROM inventory WHERE ";
+      "SELECT pid, sid, (price - price * discount) as bestprice, discount as bestdiscount FROM inventory WHERE ";
     if (!include_out_of_stock) {
       filter_query += "quantity > 0 AND ";
     }
@@ -247,8 +247,8 @@ router.post(
     filter_query += "discount BETWEEN ? AND ? AND ";
     filter_query +=
       "pid IN (SELECT pid FROM product WHERE pcategory IN (?) AND (pname LIKE ? OR pdesc LIKE ?)) ";
-    filter_query += "GROUP BY pid ";
-    filter_query += "ORDER BY " + order_by + " " + order + " ) as best";
+    // filter_query += "GROUP BY pid ";
+    filter_query += "ORDER BY " + order_by + " " + order + " ";
     // filter_query += "LIMIT " + limit + " OFFSET " + offset;
     const queryparams = [price.min];
     if (price.max) {
@@ -259,25 +259,46 @@ router.post(
     queryparams.push(categories);
     queryparams.push(search);
     queryparams.push(search);
-
     const [result] = await db.query(filter_query, queryparams);
+    let pids = [];
+    let pid_sid = {};
+    for(let i = 0; i < result.length; i++) {
+      // add pid 
+      if(!pids.includes(result[i].pid)) {
+        pids.push(result[i].pid);
+      }
+      // add pid-sid
+      if(!pid_sid[result[i].pid]) {
+        pid_sid[result[i].pid] = [];
+      }
+      pid_sid[result[i].pid].push(result[i].sid);
+    }
+
     response.total = result.length;
 
     // get pids with offset and limit
-    let pids = [];
+  
     if (limit) {
-      pids = result.slice(offset, offset + limit).map((r) => r.pid);
+      pids = pids.slice(offset, offset + limit);
     } else {
-      pids = result.slice(offset).map((r) => r.pid);
+      pids = pids.slice(offset);
     }
 
     if (pids.length === 0) {
       res.json(response);
       return;
     }
-
     // get products
     response.products = await getProductsByPids(pids);
+    // compare products with pid_sid
+    for(let i = 0; i < response.products.length; i++) {
+      for(let j=0; j< response.products[i].options.length; j++) {
+        if(!pid_sid[response.products[i].pid].includes(response.products[i].options[j].sid)) {
+          response.products[i].options.splice(j, 1);
+          j--;
+        }
+      }
+    }
 
     res.json(response);
   })
