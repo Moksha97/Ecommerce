@@ -5,7 +5,7 @@ var ash = require("express-async-handler");
 
 async function getaddress(username) {
   const [rows] = await db.query(
-    "SELECT aid, line1, line2, city, state, zip FROM address WHERE username = ? AND isdeleted = FALSE",
+    "SELECT aid, line1, line2, city, state, zip FROM address WHERE username = ? AND address_isdeleted = FALSE",
     [username]
   );
   return rows;
@@ -26,7 +26,7 @@ router.get(
     const username = req.username;
     const aid = req.params.aid;
     const [rows] = await db.query(
-      "SELECT aid, line1, line2, city, state, zip FROM address WHERE username = ? AND aid = ? AND isdeleted = FALSE",
+      "SELECT aid, line1, line2, city, state, zip FROM address WHERE username = ? AND aid = ? AND address_isdeleted = FALSE",
       [username, aid]
     );
 
@@ -77,7 +77,7 @@ router.delete(
     }
 
     const [rows] = await db.query(
-      "UPDATE address SET isdeleted = TRUE WHERE username = ? AND aid = ?",
+      "UPDATE address SET address_isdeleted = TRUE WHERE username = ? AND aid = ?",
       [username, aid]
     );
 

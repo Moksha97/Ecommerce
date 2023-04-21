@@ -7,7 +7,7 @@ CREATE TABLE address
     state    VARCHAR(50) NOT NULL,
     zip      INT NOT NULL,
     username VARCHAR(40) NOT NULL,
-    isdeleted BOOLEAN NOT NULL DEFAULT FALSE,
+    address_isdeleted BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (aid),
     FOREIGN KEY (username) REFERENCES user (username)
 );

@@ -6,7 +6,7 @@ var ash = require("express-async-handler");
 // userbank, bankaccount
 async function getpayments(username) {
   const [rows] = await db.query(
-    "SELECT accountid, accountnumber, branchcode, bank, routingnumber FROM userbank NATURAL JOIN bankaccount WHERE username = ? AND isdeleted = FALSE",
+    "SELECT accountid, accountnumber, branchcode, bank, routingnumber FROM userbank NATURAL JOIN bankaccount WHERE username = ? AND bankaccount_isdeleted = FALSE",
     [username]
   );
   return rows;
@@ -27,7 +27,7 @@ router.get(
     const username = req.username;
     const accountid = req.params.accountid;
     const [rows] = await db.query(
-      "SELECT accountid, accountnumber, branchcode, bank, routingnumber FROM userbank NATURAL JOIN bankaccount WHERE username = ? AND accountid = ? AND isdeleted = FALSE",
+      "SELECT accountid, accountnumber, branchcode, bank, routingnumber FROM userbank NATURAL JOIN bankaccount WHERE username = ? AND accountid = ? AND bankaccount_isdeleted = FALSE",
       [username, accountid]
     );
 
@@ -124,7 +124,7 @@ router.delete(
     }
 
     const [rows] = await db.query(
-      "UPDATE bankaccount SET isdeleted = TRUE WHERE accountid = ?",
+      "UPDATE bankaccount SET bankaccount_isdeleted = TRUE WHERE accountid = ?",
       [accountid]
     );
 

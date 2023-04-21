@@ -5,5 +5,5 @@ CREATE TABLE bankaccount
     branchcode    VARCHAR(10) NOT NULL,
     bank          VARCHAR(50) NOT NULL,
     routingnumber VARCHAR(20) NOT NULL,
-    isdeleted     BOOLEAN     NOT NULL DEFAULT FALSE
+    bankaccount_isdeleted     BOOLEAN     NOT NULL DEFAULT FALSE
 );
