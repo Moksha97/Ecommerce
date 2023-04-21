@@ -1,14 +1,135 @@
-import React from "react";
-import { Col, Row, Divider, Card } from "antd";
+import React, { Component } from "react";
+import { Col, Row, Divider, Card, Input, Form } from "antd";
 import { Button, Space, Layout } from "antd";
 import AppFooter from "../components/AppFooter";
 import AppHeader from "../components/AppHeader";
 import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
+import ax from "../utils/httpreq";
 
-const Profile = () => {
-  return (
-    <>
+class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      accounts: [],
+      addresses: [],
+      user: {},
+    };
+  }
+
+  componentDidMount = async () => {
+    await this.getAddressAndAccount();
+  };
+
+  getAddressAndAccount = async () => {
+    const { notification } = this.props;
+    let res = await ax.get("/users/getUser");
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      const { data } = res;
+      if (data.length !== 0) {
+        let user = data[0];
+        console.log(user);
+        this.setState({
+          user: user,
+        });
+      }
+    }
+
+    res = await ax.get("/accounts");
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      const { data } = res;
+      this.setState({
+        accounts: data,
+      });
+    }
+
+    res = await ax.get("/address");
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      const { data } = res;
+      console.log(data);
+      this.setState({
+        addresses: data,
+      });
+    }
+  };
+
+  onNewAccountFinish = async (values) => {
+    const { accountNumber, routingNumber, bank, branch } = values;
+    const { notification } = this.props;
+    const res = await ax.post("/accounts", {
+      accountnumber: accountNumber,
+      routingnumber: routingNumber,
+      bank: bank,
+      branchcode: branch,
+    });
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success`,
+        description: "Account added successfully",
+        placement: "topRight",
+      });
+    }
+    await this.getAddressAndAccount();
+  };
+
+  onNewAddressFinish = async (values) => {
+    const { line1, line2, city, state, zip } = values;
+    const { notification } = this.props;
+    const res = await ax.post("/address", {
+      line1: line1,
+      line2: line2,
+      city: city,
+      state: state,
+      zip: zip,
+    });
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success`,
+        description: "Address added successfully",
+        placement: "topRight",
+      });
+    }
+    await this.getAddressAndAccount();
+  };
+
+  render() {
+    const { accounts, addresses, user } = this.state;
+    return (
       <Layout
         className="layout-default layout-signin"
         style={{ height: "100%" }}
@@ -31,42 +152,62 @@ const Profile = () => {
             >
               Profile
               <Row>
-                <Divider />
-                <Col span={20}>
-                  <p>User ID:</p>
-                  <b>Username</b>
+                <Divider orientation="left" plain>
+                  Email
+                </Divider>
+                <Col
+                  span={20}
+                  style={{ paddingLeft: "30px", paddingRight: "30px" }}
+                >
+                  <Input disabled={true} value={user.username} type={"email"} />
                 </Col>
-                <Col span={4} style={{ alignSelf: "center" }}>
+                <Col span={4}>
                   <Space wrap>
                     <Button type="primary">Edit</Button>
                   </Space>
                 </Col>
-                <Divider />
-                <Col span={20}>
-                  <p>Email address</p>
-                  <b>sai@gmail.com</b>
+                <Divider orientation="left" plain>
+                  First name
+                </Divider>
+                <Col
+                  span={20}
+                  style={{ paddingLeft: "30px", paddingRight: "30px" }}
+                >
+                  <Input disabled={true} value={user.fname} />
                 </Col>
-                <Col span={4} style={{ alignSelf: "center" }}>
+                <Col span={4}>
                   <Space wrap>
                     <Button type="primary">Edit</Button>
                   </Space>
                 </Col>
-                <Divider />
-                <Col span={20}>
-                  <p>Password:</p>
-                  <b>**********</b>
+                <Divider orientation="left" plain>
+                  Last name
+                </Divider>
+                <Col
+                  span={20}
+                  style={{ paddingLeft: "30px", paddingRight: "30px" }}
+                >
+                  <Input disabled={true} value={user.lname} />
                 </Col>
-                <Col span={4} style={{ alignSelf: "center" }}>
+                <Col span={4}>
                   <Space wrap>
                     <Button type="primary">Edit</Button>
                   </Space>
                 </Col>
-                <Divider />
-                <Col span={20}>
-                  <p>Mobile phone:</p>
-                  <b>9988766543</b>
+                <Divider orientation="left" plain>
+                  Phone
+                </Divider>
+                <Col
+                  span={20}
+                  style={{ paddingLeft: "30px", paddingRight: "30px" }}
+                >
+                  <Input
+                    disabled={true}
+                    value={user.phone ? user.phone.replaceAll("-", "") : ""}
+                    type={"number"}
+                  />
                 </Col>
-                <Col span={4} style={{ alignSelf: "center" }}>
+                <Col span={4}>
                   <Space wrap>
                     <Button type="primary">Edit</Button>
                   </Space>
@@ -84,44 +225,111 @@ const Profile = () => {
             >
               Addresses
               <Row>
+                {addresses.map((address) => (
+                  <>
+                    <Divider orientation="left" plain>
+                      {user.preferredaddress === address.aid ? "Primary" : ""}
+                    </Divider>
+                    <Col span={18}>
+                      <code>{address.line1}</code>
+                      <br />
+                      <code>{address.line2}</code>
+                      <br />
+                      <code>
+                        {address.city +
+                          " " +
+                          address.state +
+                          ", " +
+                          address.zip}
+                      </code>
+                    </Col>
+                    <Col span={6} style={{ alignSelf: "center" }}>
+                      <Space direction="vertical">
+                        <Button style={{ marginBottom: "5px" }} type="primary">
+                          Make it primary
+                        </Button>
+                        <Button
+                          style={{ marginBottom: "5px" }}
+                          type="primary"
+                          danger
+                        >
+                          Delete
+                        </Button>
+                      </Space>
+                    </Col>
+                  </>
+                ))}
                 <Divider />
-                <Col span={20}>
-                  <b>Primary Shipping Address:</b>
-                  <p>Name Family</p>
-                  <p>110 W CityLine Dr</p>
-                  <p>Apt 1232</p>
-                  <p>Richardson TX, 75082</p>
-                </Col>
-                <Col span={4} style={{ alignSelf: "center" }}>
-                  <Button style={{ marginBottom: "5px" }} type="primary">
-                    Make it primary
-                  </Button>
-                  <Button style={{ marginBottom: "5px" }} type="primary">
-                    Edit
-                  </Button>
-                  <Button style={{ marginBottom: "5px" }} type="button">
-                    Delete
-                  </Button>
-                </Col>
-                <Divider />
-                <Col span={20}>
-                  <b>Primary Shipping Address:</b>
-                  <p>Name Family</p>
-                  <p>110 W CityLine Dr</p>
-                  <p>Apt 1232</p>
-                  <p>Richardson TX, 75082</p>
-                </Col>
-                <Col span={4} style={{ alignSelf: "center" }}>
-                  <Button style={{ marginBottom: "5px" }} type="primary">
-                    Make it primary
-                  </Button>
-                  <Button style={{ marginBottom: "5px" }} type="primary">
-                    Edit
-                  </Button>
-                  <Button style={{ marginBottom: "5px" }} type="button">
-                    Delete
-                  </Button>
-                </Col>
+                <Form
+                  onFinish={this.onNewAddressFinish}
+                  layout="vertical"
+                  className="row-col"
+                >
+                  <Space direction={"horizontal"}>
+                    <Form.Item
+                      label="Address line 1"
+                      name="line1"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your Address line 1!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item label="Address line 2" name="line2">
+                      <Input />
+                    </Form.Item>
+                  </Space>
+                  <Space direction={"horizontal"}>
+                    <Form.Item
+                      label="City"
+                      name="city"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your City!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label="State"
+                      name="state"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your State!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label="Zip"
+                      name="zip"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your Zip!",
+                        },
+                      ]}
+                    >
+                      <Input type={"number"} max={99999} />
+                    </Form.Item>
+                  </Space>
+                  <Form.Item label="">
+                    <Button
+                      style={{ marginTop: "5px" }}
+                      htmlType="submit"
+                      type="primary"
+                    >
+                      Add new address
+                    </Button>
+                  </Form.Item>
+                </Form>
               </Row>
             </Col>
 
@@ -136,82 +344,115 @@ const Profile = () => {
             >
               Payment Methods
             </Col>
-            <Col span={8}>
-              <Card bordered={false} className="card-credit header-solid h-ful">
-                <h5 className="card-number">4562 1122 4594 7852</h5>
-
-                <div className="card-footer">
-                  <div className="mr-30">
-                    <p>Card Holder</p>
-                    <h6>Jack Peterson</h6>
+            {accounts.map((account) => (
+              <Col
+                span={8}
+                id={account.accountid}
+                style={{ paddingBottom: "20px" }}
+              >
+                <Card
+                  bordered={false}
+                  className="card-credit header-solid h-ful"
+                >
+                  <code>Account number</code>
+                  <h5 className="card-number" style={{ margin: 0 }}>
+                    {account.accountnumber}
+                  </h5>
+                  <code>Routing number</code>
+                  <h6 style={{ margin: 0 }}>{account.routingnumber}</h6>
+                  <div className="card-footer">
+                    <div className="mr-30">
+                      <p>{account.bank}</p>
+                    </div>
+                    <div className="mr-30">
+                      <p>Branch: {account.branchcode}</p>
+                    </div>
                   </div>
-                  <div className="mr-30">
-                    <p>Expires</p>
-                    <h6>11/22</h6>
-                  </div>
-                  <div className="card-footer-col col-logo ml-auto">
-                    <img src={`img/mastercard-logo.png`} alt="mastercard" />
-                  </div>
-                </div>
-              </Card>
-            </Col>
+                </Card>
+              </Col>
+            ))}
             <Col span={8}>
               <Card
                 bordered={false}
-                className="card-credit header-solid h-ful"
-                style={{ backgroundColor: "lightslategray" }}
+                className="header-solid h-ful"
+                style={{ backgroundColor: "lightgray" }}
               >
-                <h5 className="card-number">4562 1122 4594 7852</h5>
-
-                <div className="card-footer">
-                  <div className="mr-30">
-                    <p>Card Holder</p>
-                    <h6>Jack Peterson</h6>
-                  </div>
-                  <div className="mr-30">
-                    <p>Expires</p>
-                    <h6>11/22</h6>
-                  </div>
-                  <div className="card-footer-col col-logo ml-auto">
-                    <img src={`img/mastercard-logo.png`} alt="mastercard" />
-                  </div>
-                </div>
+                <Form
+                  onFinish={this.onNewAccountFinish}
+                  layout="vertical"
+                  className="row-col"
+                >
+                  <Space direction={"horizontal"}>
+                    <Form.Item
+                      label="Account number"
+                      name="accountNumber"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your Account number!",
+                        },
+                      ]}
+                    >
+                      <Input type={"number"} max={9999999999} />
+                    </Form.Item>
+                    <Form.Item
+                      label="Routing number"
+                      name="routingNumber"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your Routing number!",
+                        },
+                      ]}
+                    >
+                      <Input type={"number"} max={999999999999} />
+                    </Form.Item>
+                  </Space>
+                  <Space direction={"horizontal"}>
+                    <Form.Item
+                      label="Bank"
+                      name="bank"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your Bank!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label="Branch"
+                      name="branch"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your Branch!",
+                        },
+                      ]}
+                    >
+                      <Input type={"number"} max={9999999999} />
+                    </Form.Item>
+                  </Space>
+                  <Form.Item label="">
+                    <Button
+                      style={{ marginTop: "5px" }}
+                      htmlType="submit"
+                      type="primary"
+                    >
+                      Add new account
+                    </Button>
+                  </Form.Item>
+                </Form>
               </Card>
             </Col>
-            <Col span={8}>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 2fr",
-                  gap: "50px",
-                  backgroundColor: "#eeeeee",
-                  marginTop: "10px",
-                  padding: "16px",
-                  borderRadius: "8px",
-                  width: "400px",
-                }}
-              >
-                <div>
-                  <img
-                    src="https://th.bing.com/th/id/OIP.wGCp5EhalbmWheQdMqJwpwHaHa?pid=ImgDet&rs=1" // Replace with the URL of your image
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      borderRadius: "4px",
-                    }}
-                  />
-                </div>
-                <div style={{ alignContent: "center" }}>
-                  <h4>Add a new card</h4>
-                </div>
-              </div>
-            </Col>
+            <Col span={24} style={{ height: 100 }}></Col>
           </Row>
         </Content>
-
         <AppFooter />
       </Layout>
-    </>
-  );
-};
+    );
+  }
+}
+
 export default Profile;

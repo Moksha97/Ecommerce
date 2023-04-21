@@ -32,7 +32,11 @@ function App() {
           <Route exact path="/invoice" element={<Invoice />} />
           <Route exact path="/orders" element={<OrderHistory />} />
           <Route exact path="/cart" element={<Cart notification={api} />} />
-          <Route exact path="/profile" element={<Profile />} />
+          <Route
+            exact
+            path="/profile"
+            element={<Profile notification={api} />}
+          />
         </Routes>
       </Router>
     </div>
