@@ -127,6 +127,92 @@ class Profile extends Component {
     await this.getAddressAndAccount();
   };
 
+  deleteAddress = async (id) => {
+    const { notification } = this.props;
+    const res = await ax.delete(`/address/${id}`);
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success`,
+        description: "Address deleted successfully",
+        placement: "topRight",
+      });
+    }
+    await this.getAddressAndAccount();
+  };
+
+  deleteAccount = async (id) => {
+    const { notification } = this.props;
+    const res = await ax.delete(`/accounts/${id}`);
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success`,
+        description: "Account deleted successfully",
+        placement: "topRight",
+      });
+    }
+    await this.getAddressAndAccount();
+  };
+
+  setPreferredAddress = async (id) => {
+    const { notification } = this.props;
+    const res = await ax.put(`/users/updateUser`, {
+      fieldName: "preferredaddress",
+      fieldValue: id,
+    });
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success`,
+        description: "Address set as preferred successfully",
+        placement: "topRight",
+      });
+    }
+    await this.getAddressAndAccount();
+  };
+
+  setPreferredAccount = async (id) => {
+    const { notification } = this.props;
+    const res = await ax.put(`/users/updateUser`, {
+      fieldName: "preferredaccount",
+      fieldValue: id,
+    });
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success`,
+        description: "Account set as preferred successfully",
+        placement: "topRight",
+      });
+    }
+    await this.getAddressAndAccount();
+  };
+
   render() {
     const { accounts, addresses, user } = this.state;
     return (
@@ -228,7 +314,7 @@ class Profile extends Component {
                 {addresses.map((address) => (
                   <>
                     <Divider orientation="left" plain>
-                      {user.preferredaddress === address.aid ? "Primary" : ""}
+                      {user.preferredaddress === address.aid ? "Preferred" : ""}
                     </Divider>
                     <Col span={18}>
                       <code>{address.line1}</code>
@@ -245,13 +331,22 @@ class Profile extends Component {
                     </Col>
                     <Col span={6} style={{ alignSelf: "center" }}>
                       <Space direction="vertical">
-                        <Button style={{ marginBottom: "5px" }} type="primary">
-                          Make it primary
+                        <Button
+                          style={{ marginBottom: "5px" }}
+                          type="primary"
+                          onClick={() => {
+                            this.setPreferredAddress(address.aid);
+                          }}
+                        >
+                          Make it preferred
                         </Button>
                         <Button
                           style={{ marginBottom: "5px" }}
                           type="primary"
                           danger
+                          onClick={() => {
+                            this.deleteAddress(address.aid);
+                          }}
                         >
                           Delete
                         </Button>
@@ -354,7 +449,12 @@ class Profile extends Component {
                   bordered={false}
                   className="card-credit header-solid h-ful"
                 >
-                  <code>Account number</code>
+                  <code>
+                    Account number{" "}
+                    {user.preferredaccount === account.accountid
+                      ? "(Preferred)"
+                      : ""}
+                  </code>
                   <h5 className="card-number" style={{ margin: 0 }}>
                     {account.accountnumber}
                   </h5>
@@ -368,6 +468,27 @@ class Profile extends Component {
                       <p>Branch: {account.branchcode}</p>
                     </div>
                   </div>
+                  <Space direction="horizontal">
+                    <Button
+                      style={{ marginTop: "5px" }}
+                      type="primary"
+                      onClick={() => {
+                        this.setPreferredAccount(account.accountid);
+                      }}
+                    >
+                      Make it preferred
+                    </Button>
+                    <Button
+                      style={{ marginTop: "5px" }}
+                      type="primary"
+                      danger
+                      onClick={() => {
+                        this.deleteAccount(account.accountid);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </Space>
                 </Card>
               </Col>
             ))}
