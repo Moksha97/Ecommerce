@@ -14,6 +14,7 @@ class Profile extends Component {
       accounts: [],
       addresses: [],
       user: {},
+      formDisabled: true,
     };
   }
 
@@ -213,8 +214,32 @@ class Profile extends Component {
     await this.getAddressAndAccount();
   };
 
+  onProfileFinish = async (values) => {
+    const { notification } = this.props;
+    const res = await ax.put(`/users/updateUser`, {
+      fieldName: "name",
+      fieldValue: values.name,
+    });
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success`,
+        description: "Profile updated successfully",
+        placement: "topRight",
+      });
+    }
+    await this.setState({ formDisabled: true });
+    await this.getAddressAndAccount();
+  };
+
   render() {
-    const { accounts, addresses, user } = this.state;
+    const { accounts, addresses, user, formDisabled } = this.state;
     return (
       <Layout
         className="layout-default layout-signin"
@@ -238,69 +263,89 @@ class Profile extends Component {
             >
               Profile
               <Row>
-                <Divider orientation="left" plain>
-                  Email
-                </Divider>
-                <Col
-                  span={20}
-                  style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                >
-                  <Input disabled={true} value={user.username} type={"email"} />
+                <Col span={12}>
+                  <Button
+                    type="default"
+                    onClick={() => {
+                      this.setState({ formDisabled: false });
+                    }}
+                  >
+                    Edit
+                  </Button>
                 </Col>
-                <Col span={4}>
-                  <Space wrap>
-                    <Button type="primary">Edit</Button>
-                  </Space>
-                </Col>
-                <Divider orientation="left" plain>
-                  First name
-                </Divider>
-                <Col
-                  span={20}
-                  style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                >
-                  <Input disabled={true} value={user.fname} />
-                </Col>
-                <Col span={4}>
-                  <Space wrap>
-                    <Button type="primary">Edit</Button>
-                  </Space>
-                </Col>
-                <Divider orientation="left" plain>
-                  Last name
-                </Divider>
-                <Col
-                  span={20}
-                  style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                >
-                  <Input disabled={true} value={user.lname} />
-                </Col>
-                <Col span={4}>
-                  <Space wrap>
-                    <Button type="primary">Edit</Button>
-                  </Space>
-                </Col>
-                <Divider orientation="left" plain>
-                  Phone
-                </Divider>
-                <Col
-                  span={20}
-                  style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                >
-                  <Input
-                    disabled={true}
-                    value={user.phone ? user.phone.replaceAll("-", "") : ""}
-                    type={"number"}
-                  />
-                </Col>
-                <Col span={4}>
-                  <Space wrap>
-                    <Button type="primary">Edit</Button>
-                  </Space>
-                </Col>
+                {user.username ? (
+                  <Form
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 16 }}
+                    onFinish={this.onProfileFinish}
+                    layout="horizontal"
+                    className="row-col"
+                    disabled={formDisabled}
+                    style={{ minWidth: 400 }}
+                  >
+                    <Form.Item
+                      label="Email"
+                      name="username"
+                      initialValue={user.username}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your Email!",
+                        },
+                      ]}
+                    >
+                      <Input type={"email"} />
+                    </Form.Item>
+                    <Form.Item
+                      label="First name"
+                      name="fname"
+                      initialValue={user.fname}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your First name!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label="Last name"
+                      name="lname"
+                      initialValue={user.lname}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your Last name!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label="Phone"
+                      name="phone"
+                      initialValue={user.phone}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your Phone!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item label=" ">
+                      <Button type="primary" htmlType={"submit"}>
+                        Submit
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                ) : (
+                  <></>
+                )}
               </Row>
             </Col>
-
             <Col
               span={12}
               style={{
