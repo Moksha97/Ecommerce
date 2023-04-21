@@ -5,7 +5,7 @@ var ash = require("express-async-handler");
 
 async function getDetails(username) {
   const [rows] = await db.query(
-    "SELECT fname,lname,password,isadmin,preferredaddress,preferredaccount FROM user WHERE username = ?",
+    "SELECT username,fname,lname,password,isadmin,preferredaddress,preferredaccount FROM user WHERE username = ?",
     [username]
   );
   return rows;
