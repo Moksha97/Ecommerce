@@ -79,6 +79,18 @@ router.put(
     const username = req.username;
     const accountid = req.params.accountid;
     const { accountnumber, branchcode, bank, routingnumber } = req.body;
+
+    // check if accountid is valid
+    const [rows1] = await db.query(
+      "SELECT accountid FROM userbank WHERE username = ? AND accountid = ?",
+      [username, accountid]
+    );
+
+    if (rows1.length === 0) {
+      res.status(404).json({ error: "Account not found" });
+      return;
+    }
+
     const [rows] = await db.query(
       "UPDATE bankaccount SET accountnumber = ?, branchcode = ?, bank = ?, routingnumber = ? WHERE accountid = ?",
       [accountnumber, branchcode, bank, routingnumber, accountid]
@@ -135,6 +147,37 @@ router.delete(
     }
     const payments = await getpayments(username);
     res.json(payments);
+  })
+);
+
+router.put(
+  "/preferred/:accountid",
+  ash(async (req, res) => {
+    const username = req.username;
+    const accountid = parseInt(req.params.accountid);
+
+    // check if accountid is valid
+    const [rows1] = await db.query(
+      "SELECT accountid FROM userbank NATURAL JOIN bankaccount WHERE username = ? AND accountid = ? AND bankaccount_isdeleted = FALSE",
+      [username, accountid]
+    );
+
+    if (rows1.length === 0) {
+      res.status(404).json({ error: "Account not found" });
+      return;
+    }
+
+    const [rows] = await db.query(
+      "UPDATE user SET preferredaccount = ? WHERE username = ?",
+      [accountid, username]
+    );
+
+    if (rows.affectedRows === 0) {
+      res.status(500).json({ error: "Unable to update preferred account" });
+      return;
+    }
+
+    res.json({ message: "Preferred account updated" });
   })
 );
 

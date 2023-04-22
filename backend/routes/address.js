@@ -112,4 +112,36 @@ router.put(
   })
 );
 
+router.put(
+  "/preferred/:aid",
+  ash(async (req, res) => {
+    console.log("preferred address");
+    const username = req.username;
+    const aid = req.params.aid;
+
+    // check if the address is valid
+    const [rows1] = await db.query(
+      "SELECT aid FROM address WHERE username = ? AND aid = ? AND address_isdeleted = FALSE",
+      [username, aid]
+    );
+    if (rows1.length === 0) {
+      res.status(404).json({ error: "Address not found" });
+      return;
+    }
+
+    const [rows] = await db.query(
+      "UPDATE user SET preferredaddress = ? WHERE username = ?",
+      [aid, username]
+    );
+
+    // check if the address is updated
+    if (rows.affectedRows === 0) {
+      res.status(500).json({ error: "Unable to update address" });
+      return;
+    }
+
+    res.json({ message: "Preferred address updated" });
+  })
+);
+
 module.exports = router;
