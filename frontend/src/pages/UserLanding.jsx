@@ -79,7 +79,6 @@ class UserLanding extends Component {
       });
     } else {
       const { data } = res;
-      console.log(data);
       this.setState({
         total: data.total,
         products: data.products ? data.products : [],

@@ -170,10 +170,7 @@ class Profile extends Component {
 
   setPreferredAddress = async (id) => {
     const { notification } = this.props;
-    const res = await ax.put(`/users/updateUser`, {
-      fieldName: "preferredaddress",
-      fieldValue: id,
-    });
+    const res = await ax.put(`/address/preferred/${id}`);
     if (res.status !== 200) {
       const { response } = res;
       notification.error({
@@ -193,10 +190,7 @@ class Profile extends Component {
 
   setPreferredAccount = async (id) => {
     const { notification } = this.props;
-    const res = await ax.put(`/users/updateUser`, {
-      fieldName: "preferredaccount",
-      fieldValue: id,
-    });
+    const res = await ax.put(`/accounts/preferred/${id}`);
     if (res.status !== 200) {
       const { response } = res;
       notification.error({
@@ -263,7 +257,7 @@ class Profile extends Component {
             >
               Profile
               <Row>
-                <Col span={12}>
+                <Col span={24}>
                   <Button
                     type="default"
                     onClick={() => {
