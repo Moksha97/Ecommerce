@@ -19,6 +19,7 @@ var orderRouter = require("./routes/order");
 var AuthProductRouter = require("./routes/auth_product");
 var sellerRouter = require("./routes/admin_seller");
 var inventoryRouter = require("./routes/admin_inventory");
+var admin_productRouter = require("./routes/admin_product");
 
 var app = express();
 
@@ -63,6 +64,7 @@ app.use("/product", AuthProductRouter);
 app.use(admin);
 app.use("/admin/seller", sellerRouter);
 app.use("/admin/inventory", inventoryRouter);
+app.use("/admin/product", admin_productRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
