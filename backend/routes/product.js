@@ -262,13 +262,13 @@ router.post(
     const [result] = await db.query(filter_query, queryparams);
     let pids = [];
     let pid_sid = {};
-    for(let i = 0; i < result.length; i++) {
-      // add pid 
-      if(!pids.includes(result[i].pid)) {
+    for (let i = 0; i < result.length; i++) {
+      // add pid
+      if (!pids.includes(result[i].pid)) {
         pids.push(result[i].pid);
       }
       // add pid-sid
-      if(!pid_sid[result[i].pid]) {
+      if (!pid_sid[result[i].pid]) {
         pid_sid[result[i].pid] = [];
       }
       pid_sid[result[i].pid].push(result[i].sid);
@@ -277,7 +277,7 @@ router.post(
     response.total = result.length;
 
     // get pids with offset and limit
-  
+
     if (limit) {
       pids = pids.slice(offset, offset + limit);
     } else {
@@ -291,9 +291,13 @@ router.post(
     // get products
     response.products = await getProductsByPids(pids);
     // compare products with pid_sid
-    for(let i = 0; i < response.products.length; i++) {
-      for(let j=0; j< response.products[i].options.length; j++) {
-        if(!pid_sid[response.products[i].pid].includes(response.products[i].options[j].sid)) {
+    for (let i = 0; i < response.products.length; i++) {
+      for (let j = 0; j < response.products[i].options.length; j++) {
+        if (
+          !pid_sid[response.products[i].pid].includes(
+            response.products[i].options[j].sid
+          )
+        ) {
           response.products[i].options.splice(j, 1);
           j--;
         }

@@ -16,6 +16,7 @@ var accountsRouter = require("./routes/accounts");
 var addressRouter = require("./routes/address");
 var cartRouter = require("./routes/cart");
 var orderRouter = require("./routes/order");
+var AuthProductRouter = require("./routes/auth_product");
 
 var app = express();
 
@@ -54,6 +55,7 @@ app.use("/accounts", accountsRouter);
 app.use("/address", addressRouter);
 app.use("/cart", cartRouter);
 app.use("/order", orderRouter);
+app.use("/product", AuthProductRouter);
 
 // Admin Routes
 app.use(admin);
