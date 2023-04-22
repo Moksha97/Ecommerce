@@ -9,6 +9,22 @@ async function getpayments(username) {
     "SELECT accountid, accountnumber, branchcode, bank, routingnumber FROM userbank NATURAL JOIN bankaccount WHERE username = ? AND bankaccount_isdeleted = FALSE",
     [username]
   );
+
+  // get preferred payment
+  const [rows2] = await db.query(
+    "SELECT preferredaccount FROM user WHERE username = ?",
+    [username]
+  );
+
+  const preferredaccount = rows2[0].preferredaccount;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].accountid === preferredaccount) {
+      rows[i].preferred = true;
+    } else {
+      rows[i].preferred = false;
+    }
+  }
+
   return rows;
 }
 

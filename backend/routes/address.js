@@ -8,6 +8,22 @@ async function getaddress(username) {
     "SELECT aid, line1, line2, city, state, zip FROM address WHERE username = ? AND address_isdeleted = FALSE",
     [username]
   );
+
+  // get preferred address
+  const [rows2] = await db.query(
+    "SELECT preferredaddress FROM user WHERE username = ?",
+    [username]
+  );
+
+  const preferredaddress = rows2[0].preferredaddress;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].aid === preferredaddress) {
+      rows[i].preferred = true;
+    } else {
+      rows[i].preferred = false;
+    }
+  }
+
   return rows;
 }
 
