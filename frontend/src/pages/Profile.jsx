@@ -241,7 +241,13 @@ class Profile extends Component {
       >
         <AppHeader />
         <Categories />
-        <Content style={{ marginBottom: "100px" }}>
+        <Content
+          style={{
+            marginBottom: "100px",
+            paddingLeft: "10%",
+            paddingRight: "10%",
+          }}
+        >
           <Row
             gutter={[24, 0]}
             justify="left"

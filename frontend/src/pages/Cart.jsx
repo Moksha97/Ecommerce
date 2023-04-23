@@ -119,7 +119,13 @@ class Cart extends Component {
         >
           <AppHeader />
           <Categories />
-          <Content style={{ paddingBottom: "100px" }}>
+          <Content
+            style={{
+              paddingBottom: "100px",
+              paddingLeft: "10%",
+              paddingRight: "10%",
+            }}
+          >
             <Row
               gutter={[24, 0]}
               justify="left"
@@ -289,7 +295,7 @@ class Cart extends Component {
                       }}
                       type="primary"
                     >
-                      Select
+                      BUY
                     </Button>
                   </div>
                 </div>
@@ -332,21 +338,8 @@ class Cart extends Component {
                 )}
               </Col>
               <Col span={8} style={{ alignSelf: "center" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "8px",
-                    Padding: "10px",
-                  }}
-                >
+                <div>
                   <Button
-                    style={{
-                      width: "100%",
-                      height: "40px",
-                      fontSize: "16px",
-                    }}
                     type="primary"
                     onClick={() => {
                       window.location.href = "/profile";
@@ -404,21 +397,8 @@ class Cart extends Component {
                 )}
               </Col>
               <Col span={8} style={{ alignSelf: "center" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "8px",
-                    Padding: "10px",
-                  }}
-                >
+                <div>
                   <Button
-                    style={{
-                      width: "100%",
-                      height: "40px",
-                      fontSize: "16px",
-                    }}
                     type="primary"
                     onClick={() => {
                       window.location.href = "/profile";

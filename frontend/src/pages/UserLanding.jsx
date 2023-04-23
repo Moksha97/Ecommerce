@@ -196,14 +196,21 @@ class UserLanding extends Component {
           notification={notification}
           selected={this.categorySelected}
         />
-        <Content style={{ paddingBottom: "100px", paddingTop: 0 }}>
+        <Content
+          style={{
+            paddingBottom: "100px",
+            paddingTop: 0,
+            paddingLeft: showSidebar ? "5%" : "10%",
+            paddingRight: showSidebar ? "5%" : "10%",
+          }}
+        >
           <Col
             span={24}
             style={{
               justifyContent: "right",
               display: "flex",
               alignItems: "center",
-              marginRight: "50px",
+              marginRight: "60px",
               paddingTop: "20px",
               paddingBottom: "20px",
             }}
