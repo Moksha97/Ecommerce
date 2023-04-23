@@ -17,6 +17,7 @@ import AppFooter from "../components/AppFooter";
 import { Link } from "react-router-dom";
 import Categories from "../components/Categories";
 import ax from "../utils/httpreq";
+import UnsplashImage from "../components/AsyncImage";
 
 const { Content } = Layout;
 
@@ -274,12 +275,7 @@ class UserLanding extends Component {
                   >
                     <Card
                       bordered={true}
-                      cover={
-                        <img
-                          alt="product img"
-                          src={`/img/image-${index + 1}.jpg`}
-                        />
-                      }
+                      cover={<UnsplashImage keyword={product.pname} />}
                       style={{ marginBottom: "12px" }}
                     >
                       <div className="card-tag" style={{ fontSize: 21 }}>

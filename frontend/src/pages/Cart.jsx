@@ -6,6 +6,7 @@ import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
 import AppFooter from "../components/AppFooter";
 import ax from "../utils/httpreq";
+import UnsplashImage from "../components/AsyncImage";
 
 class Cart extends Component {
   constructor(props) {
@@ -146,12 +147,7 @@ class Cart extends Component {
                         <Card
                           size={"small"}
                           bordered={true}
-                          cover={
-                            <img
-                              alt="product img"
-                              src={"https://picsum.photos/1920/1080"}
-                            />
-                          }
+                          cover={<UnsplashImage keyword={item.product.pname} />}
                         >
                           {item.product
                             ? item.product.pcategory +

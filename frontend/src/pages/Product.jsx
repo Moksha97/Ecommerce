@@ -17,6 +17,7 @@ import {
 import AppHeader from "../components/AppHeader";
 import withRouter from "../components/withRouter";
 import ax from "../utils/httpreq";
+import UnsplashImage from "../components/AsyncImage";
 
 const { Content } = Layout;
 
@@ -116,7 +117,6 @@ class Product extends Component {
 
   render() {
     const { product, options, option } = this.state;
-    const { id } = this.props.params;
 
     return (
       <Layout
@@ -145,17 +145,15 @@ class Product extends Component {
                     lg={12}
                     xl={10}
                     className="col-img"
+                    style={{
+                      marginTop: "30px",
+                    }}
                   >
-                    <div
-                      style={{
-                        height: 300,
-                        backgroundImage: `url('http://localhost:3002/img/image-${id}.jpg')`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        marginTop: "30px",
-                        borderRadius: "10px",
-                      }}
-                    ></div>
+                    {product.pname ? (
+                      <UnsplashImage keyword={product.pname} height={300} />
+                    ) : (
+                      ""
+                    )}
                   </Col>
                   <Col
                     xs={24}
