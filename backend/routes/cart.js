@@ -14,7 +14,6 @@ async function getCart(username) {
     let totalprice = 0;
     let discountprice = 0;
     for (let i = 0; i < products.length; i++) {
-        console.log(products[i].actualprice, products[i].discountedprice)
         totalprice += Number(products[i].actualprice);
         discountprice += Number(products[i].discountedprice);
     }
