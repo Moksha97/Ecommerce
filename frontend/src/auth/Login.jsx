@@ -11,18 +11,20 @@ const { Content } = Layout;
 class Login extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      account: "customer",
+    };
   }
 
   componentDidMount = async () => {};
 
   onFinish = async (values) => {
     const { notification } = this.props;
-    console.log("Success:", values);
+    const { account } = this.state;
     const res = await ax.post("/login", {
       username: values.email,
       password: values.password,
     });
-    // console.log(res);
     if (res.status !== 200) {
       const { response } = res;
       notification.error({
@@ -32,11 +34,23 @@ class Login extends Component {
       });
     } else {
       const { data } = res;
-      // console.log(data);
-      if (data.isadmin === 1) {
+      console.log(data);
+      if (data.isadmin === 1 && account === "admin") {
         window.location.href = "/admin";
-      } else {
+      } else if (data.isadmin === 0 && account === "customer") {
         window.location.href = "/";
+      } else if (data.isadmin === 1 && account === "customer") {
+        notification.error({
+          message: `Error`,
+          description: "Please login as admin",
+          placement: "topRight",
+        });
+      } else if (data.isadmin === 0 && account === "admin") {
+        notification.error({
+          message: `Error`,
+          description: "Please login as customer",
+          placement: "topRight",
+        });
       }
     }
   };
@@ -46,6 +60,7 @@ class Login extends Component {
   };
 
   render() {
+    const { account } = this.state;
     return (
       <Layout
         className="layout-default layout-signin"
@@ -75,8 +90,11 @@ class Login extends Component {
               >
                 <Form.Item label="" name="account">
                   <Radio.Group
-                    defaultValue="customer"
+                    defaultValue={account}
                     buttonStyle="solid"
+                    onChange={(e) => {
+                      this.setState({ account: e.target.value });
+                    }}
                     style={{ width: "100%" }}
                   >
                     <Radio.Button

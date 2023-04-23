@@ -42,11 +42,6 @@ class AppHeader extends Component {
         link: "/profile",
       },
       {
-        key: "invoice",
-        label: <a href={"/invoice"}>Invoice</a>,
-        link: "/invoice",
-      },
-      {
         key: "logout",
         label: <a href={"/logout"}>Logout</a>,
         link: "/logout",

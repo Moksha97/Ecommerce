@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, Layout } from "antd";
+import { Button, Card, Layout, Space } from "antd";
 import { Col, Row, Divider } from "antd";
 import AppHeader from "../components/AppHeader";
 import Categories from "../components/Categories";
@@ -47,29 +47,25 @@ class Cart extends Component {
       });
     } else {
       let cart = res.data;
-      if (cart && cart.length > 0) {
-        cart = await Promise.all(
-          cart.map(async (item) => {
-            const productRes = await ax.get(`/product/${item.pid}`);
-            if (productRes.status === 200) {
-              const { data } = productRes;
-              const seller = data.options.find((o) => o.sid === item.sid);
-              let price = Math.round(parseFloat(seller.price) * 100) / 100;
-              let discount =
-                Math.round(parseFloat(seller.discount) * 100) / 100;
-              seller.finalPrice =
-                Math.round(price * (1 - discount) * 100) / 100;
-              item.seller = seller;
-              item.product = data;
-            } else {
-              item.product = null;
-              item.seller = null;
-            }
-            return item;
-          })
-        );
-        this.setState({ cart: cart });
-      }
+      cart = await Promise.all(
+        cart.map(async (item) => {
+          const productRes = await ax.get(`/product/${item.pid}`);
+          if (productRes.status === 200) {
+            const { data } = productRes;
+            const seller = data.options.find((o) => o.sid === item.sid);
+            let price = Math.round(parseFloat(seller.price) * 100) / 100;
+            let discount = Math.round(parseFloat(seller.discount) * 100) / 100;
+            seller.finalPrice = Math.round(price * (1 - discount) * 100) / 100;
+            item.seller = seller;
+            item.product = data;
+          } else {
+            item.product = null;
+            item.seller = null;
+          }
+          return item;
+        })
+      );
+      this.setState({ cart: cart });
     }
 
     const { user } = this.state;
@@ -157,6 +153,30 @@ class Cart extends Component {
     }
   };
 
+  removeFromCart = async (pid, sid) => {
+    const { notification } = this.props;
+    let res = await ax.post(`/cart/modifycart`, {
+      pid: pid,
+      sid: sid,
+      quantity: 0,
+    });
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success: Removed from cart`,
+        description: "Item removed from cart successfully",
+        placement: "topRight",
+      });
+      await this.getCartDetails();
+    }
+  };
+
   render() {
     const { cart, account, address } = this.state;
     console.log(cart);
@@ -216,7 +236,10 @@ class Cart extends Component {
                           <Col span={20}>
                             <h3>{item.pname}</h3>
                           </Col>
-                          <Col span={4}>
+                          <Col
+                            span={4}
+                            style={{ justifyContent: "right", display: "flex" }}
+                          >
                             <h3>
                               US ${" "}
                               {Math.round(
@@ -255,10 +278,29 @@ class Cart extends Component {
                             span={8}
                             style={{ justifyContent: "right", display: "flex" }}
                           >
-                            <Button type="primary">Edit</Button>
-                            <Button type="primary" danger>
-                              Remove
-                            </Button>
+                            <Space direction={"vertical"} align={"end"}>
+                              <Button
+                                type="primary"
+                                onClick={() => {
+                                  window.location.href =
+                                    "/product/" + item.product.pid;
+                                }}
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                type="primary"
+                                danger
+                                onClick={() => {
+                                  this.removeFromCart(
+                                    item.product.pid,
+                                    item.seller.sid
+                                  );
+                                }}
+                              >
+                                Remove
+                              </Button>
+                            </Space>
                           </Col>
                         </Row>
                       </Col>
@@ -294,7 +336,7 @@ class Cart extends Component {
                     }}
                   >
                     <div>Shipping</div>
-                    <div>US $Fee</div>
+                    <div style={{ color: "green" }}>FREE</div>
                   </div>
                   <div
                     style={{
@@ -305,16 +347,16 @@ class Cart extends Component {
                     <div>Discount</div>
                     <div>US $Discount</div>
                   </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div>Estimated Tax</div>
-                    <div>US $Tax</div>
-                  </div>
-                  <Divider style={{ marginTop: "0px" }} />
+                  {/*<div*/}
+                  {/*  style={{*/}
+                  {/*    display: "flex",*/}
+                  {/*    justifyContent: "space-between",*/}
+                  {/*  }}*/}
+                  {/*>*/}
+                  {/*  <div>Estimated Tax</div>*/}
+                  {/*  <div>US $Tax</div>*/}
+                  {/*</div>*/}
+                  <Divider />
                   <div
                     style={{
                       display: "flex",
