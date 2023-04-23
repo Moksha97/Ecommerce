@@ -84,7 +84,11 @@ class Product extends Component {
     console.log("Failed:", errorInfo);
   };
   onFinish = async (values) => {
-    console.log("Success:", values);
+    await this.addToCart(values);
+  };
+
+  addToCart = async (values) => {
+    console.log("values", values);
     const { notification } = this.props;
     const { quantity, sid } = values;
     const { id } = this.props.params;
@@ -253,24 +257,24 @@ class Product extends Component {
                               <p>List: {option.price}</p>
                             )}
                           </Form.Item>
-                          <Form.Item>
-                            <Button
-                              type="primary"
-                              htmlType="submit"
-                              style={{ width: "100%" }}
-                            >
-                              <span style={{ color: "white" }}>BUY NOW</span>
-                            </Button>
-                          </Form.Item>
-                          <Form.Item>
-                            <Button
-                              type="button"
-                              htmlType="submit"
-                              style={{ width: "100%" }}
-                            >
-                              ADD TO CART
-                            </Button>
-                          </Form.Item>
+                          <Space direction="horizontal">
+                            <Form.Item name="buy">
+                              <Button type="primary" htmlType="submit">
+                                BUY NOW
+                              </Button>
+                            </Form.Item>
+                            <Form.Item name="addToCart">
+                              <Button
+                                type="default"
+                                htmlType="submit"
+                                onClick={() => {
+                                  console.log("F");
+                                }}
+                              >
+                                ADD TO CART
+                              </Button>
+                            </Form.Item>
+                          </Space>
                         </Form>
                       </div>
                     </div>

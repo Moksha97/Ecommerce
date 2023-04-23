@@ -19,7 +19,7 @@ class Cart extends Component {
     };
   }
 
-  getCardDetails = async () => {
+  getCartDetails = async () => {
     const { notification } = this.props;
     let res = await ax.get("/users/getUser");
     if (res.status !== 200) {
@@ -105,7 +105,56 @@ class Cart extends Component {
   };
 
   componentDidMount = async () => {
-    await this.getCardDetails();
+    await this.getCartDetails();
+  };
+
+  buy = async () => {
+    const { cart, account, address } = this.state;
+    const { notification } = this.props;
+    if (!cart || cart.length === 0) {
+      notification.error({
+        message: `Error: No items in cart`,
+        description: "Please add items to cart",
+        placement: "topRight",
+      });
+      return;
+    }
+    if (!account) {
+      notification.error({
+        message: `Error: No account`,
+        description: "Please add an account to buy",
+        placement: "topRight",
+      });
+      return;
+    }
+    if (!address) {
+      notification.error({
+        message: `Error: No address`,
+        description: "Please add an address to buy",
+        placement: "topRight",
+      });
+      return;
+    }
+
+    let res = await ax.post("/order/placeorder", {
+      aid: address.aid,
+      accountid: account.accountid,
+    });
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success: Order placed`,
+        description: "Order placed successfully",
+        placement: "topRight",
+      });
+      document.location.href = "/orders";
+    }
   };
 
   render() {
@@ -294,6 +343,7 @@ class Cart extends Component {
                         marginTop: "20px",
                       }}
                       type="primary"
+                      onClick={this.buy}
                     >
                       BUY
                     </Button>
