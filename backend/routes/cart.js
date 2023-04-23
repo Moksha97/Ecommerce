@@ -6,10 +6,23 @@ var ash = require ("express-async-handler");
 
 // common get cart function to reuse
 async function getCart(username) {
-    const [rows] = await db.query(
-        "select c.pid, p.pname, c.sid, c.username, c.quantity, c.quantity * i.price * (1-i.discount) as totalprice from cart c, product p, inventory i where c.pid = p.pid and c.pid = i.pid and c.sid = i.sid and c.username = ?",
+    const [products] = await db.query(
+        "select c.pid, p.pname, c.sid, c.username, c.quantity, c.quantity * i.price as actualprice, c.quantity * i.price * (1-i.discount) as totalprice, c.quantity * i.price * i.discount as discountedprice from cart c, product p, inventory i where c.pid = p.pid and c.pid = i.pid and c.sid = i.sid and c.username = ?",
         [username]);
-    return rows;
+
+    // get total price without discount, and discounted amount and total price
+    let totalprice = 0;
+    let discountprice = 0;
+    for (let i = 0; i < products.length; i++) {
+        console.log(products[i].actualprice, products[i].discountedprice)
+        totalprice += Number(products[i].actualprice);
+        discountprice += Number(products[i].discountedprice);
+    }
+    totalprice = Math.round(totalprice * 100) / 100;
+    discountprice = Math.round(discountprice * 100) / 100;
+    const finalprice = totalprice - discountprice;
+    
+    return {products, totalprice, discountprice, finalprice};
 }
 
 // modify cart functional
@@ -76,7 +89,7 @@ router.get("/getcart",
         const username = req.username;
         // select productname, price and discount as well
         const rows = await getCart(username);
-        if(rows.length === 0) {
+        if(rows.products.length === 0) {
             res.json([]);
         }
         res.json(rows);

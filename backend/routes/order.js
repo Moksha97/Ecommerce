@@ -41,7 +41,7 @@ router.post("/placeorder",
 
         // get cart items
         const cart_rows = await getCart(username);
-        if (cart_rows.length === 0) {
+        if (cart_rows.products.length === 0) {
             res.status(400).json({ error: "Cart is empty" });
             return;
         }
@@ -69,10 +69,10 @@ router.post("/placeorder",
         const orderid = order_rows.insertId;
 
         // insert order into items
-        for (let i = 0; i < cart_rows.length; i++) {
+        for (let i = 0; i < cart_rows.products.length; i++) {
             const [orderitem_rows] = await db.query(
                 "Insert into items ( pid, oid, sid, price, quantity) values (?, ?, ?, ?,?)",
-                [cart_rows[i].pid, orderid, cart_rows[i].sid, cart_rows[i].totalprice, cart_rows[i].quantity]);
+                [cart_rows.products[i].pid, orderid, cart_rows.products[i].sid, cart_rows.products[i].totalprice, cart_rows.products[i].quantity]);
         }
 
         // delete cart
@@ -81,10 +81,10 @@ router.post("/placeorder",
             [username]);
                 
         // update inventory
-        for (let i = 0; i < cart_rows.length; i++) {
+        for (let i = 0; i < cart_rows.products.length; i++) {
             const [update_inventory] = await db.query(
                 "update inventory set quantity = quantity - ? where pid = ? and sid = ?",
-                [cart_rows[i].quantity, cart_rows[i].pid, cart_rows[i].sid]);
+                [cart_rows.products[i].quantity, cart_rows.products[i].pid, cart_rows.products[i].sid]);
         }
 
         res.json({ message: "Order placed successfully" });
