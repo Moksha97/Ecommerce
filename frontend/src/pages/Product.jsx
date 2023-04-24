@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import AppFooter from "../components/AppFooter";
-import Categories from "../components/Categories";
 import {
   Button,
   Card,
@@ -131,10 +130,11 @@ class Product extends Component {
         style={{ height: "100%" }}
       >
         <AppHeader />
-        <Categories />
+        {/*<Categories />*/}
         <Content
           style={{
             paddingBottom: "100px",
+            paddingTop: "100px",
             paddingLeft: "10%",
             paddingRight: "10%",
           }}

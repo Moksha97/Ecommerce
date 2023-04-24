@@ -10,6 +10,12 @@ class UnsplashImage extends Component {
     };
   }
 
+  componentDidUpdate = async (prevProps) => {
+    if (prevProps.keyword !== this.props.keyword) {
+      await this.fetchImage();
+    }
+  };
+
   componentDidMount = async () => {
     await this.fetchImage();
   };

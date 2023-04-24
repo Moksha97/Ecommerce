@@ -5,6 +5,7 @@ import { Col, Layout, Menu, Row } from "antd";
 import { AppstoreOutlined } from "@ant-design/icons";
 import Inventory from "./admin/Inventory";
 import Seller from "./admin/Seller";
+import Product from "./admin/Product";
 
 class AdminLanding extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class AdminLanding extends Component {
       {
         label: "Seller",
         key: "seller",
+        icon: <AppstoreOutlined />,
         children: [
           {
             label: "Add new seller",
@@ -35,12 +37,21 @@ class AdminLanding extends Component {
             key: "updateSeller",
           },
         ],
-        icon: <AppstoreOutlined />,
       },
       {
         label: "Products",
         key: "products",
         icon: <AppstoreOutlined />,
+        children: [
+          {
+            label: "Add new product",
+            key: "addProducts",
+          },
+          {
+            label: "Update product",
+            key: "updateProducts",
+          },
+        ],
       },
       {
         label: "Inventory",
@@ -70,8 +81,10 @@ class AdminLanding extends Component {
         return <Inventory />;
       case "orders":
         return <div>Orders</div>;
-      case "products":
-        return <div>Products</div>;
+      case "addProducts":
+        return <Product mode={"add"} notification={notification} />;
+      case "updateProducts":
+        return <Product mode={"update"} notification={notification} />;
       case "addSeller":
         return <Seller mode={"add"} notification={notification} />;
       case "updateSeller":
