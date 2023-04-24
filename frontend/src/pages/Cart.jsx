@@ -461,7 +461,7 @@ class Cart extends Component {
                     </code>
                   </>
                 ) : (
-                  "No preferred address is set"
+                  <Empty />
                 )}
               </Col>
               <Col span={8} style={{ alignSelf: "center" }}>
@@ -520,7 +520,7 @@ class Cart extends Component {
                     </div>
                   </Card>
                 ) : (
-                  "No preferred payment method is set"
+                  <Empty />
                 )}
               </Col>
               <Col span={8} style={{ alignSelf: "center" }}>

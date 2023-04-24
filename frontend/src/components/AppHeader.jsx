@@ -14,6 +14,7 @@ class AppHeader extends Component {
       links: [],
       fullName: "",
       loggedIn: false,
+      user: {},
     };
   }
 
@@ -79,18 +80,41 @@ class AppHeader extends Component {
       const { data } = res;
       if (data.length !== 0) {
         let user = data[0];
-        this.setState({
-          defaultLinks: defaultLinksIfLoggedIn,
-          links: linksIfLoggedIn,
-          fullName: user.fname + " " + user.lname,
-          loggedIn: true,
-        });
+        if (user.isadmin === 1) {
+          this.setState({
+            defaultLinks: [
+              {
+                key: "home",
+                label: "Home",
+                link: "/admin",
+              },
+            ],
+            links: [
+              {
+                key: "logout",
+                label: <a href={"/logout"}>Logout</a>,
+                link: "/logout",
+                danger: true,
+              },
+            ],
+            fullName: user.fname + " " + user.lname,
+            loggedIn: true,
+          });
+        } else {
+          this.setState({
+            defaultLinks: defaultLinksIfLoggedIn,
+            links: linksIfLoggedIn,
+            fullName: user.fname + " " + user.lname,
+            loggedIn: true,
+          });
+        }
+        this.setState({ user: user });
       }
     }
   };
 
   render() {
-    const { defaultLinks, links, fullName, loggedIn } = this.state;
+    const { defaultLinks, links, fullName, loggedIn, user } = this.state;
     const { onSearch } = this.props;
     return (
       <Header
@@ -101,7 +125,7 @@ class AppHeader extends Component {
         }}
       >
         <div className="header-col header-brand">
-          <Link to={"/"}>
+          <Link to={user.isadmin === 1 ? "/admin" : "/"}>
             <h5 style={{ fontSize: "2rem" }}>
               <span style={{ color: "#0076be" }}>My</span>
               <span style={{ color: "#48bf91" }}>Shop</span>
@@ -109,23 +133,27 @@ class AppHeader extends Component {
           </Link>
         </div>
         <div className="header-col header-nav">
-          <Form
-            onFinish={onSearch ? onSearch : () => {}}
-            style={{ paddingTop: "8px" }}
-          >
-            <Form.Item name="search">
-              <Input
-                bordered={false}
-                placeholder="Search..."
-                allowClear
-                style={{
-                  alignSelf: "center",
-                  marginLeft: "50px",
-                  backgroundColor: "#f0f2f5",
-                }}
-              />
-            </Form.Item>
-          </Form>
+          {user.isadmin === 1 ? (
+            ""
+          ) : (
+            <Form
+              onFinish={onSearch ? onSearch : () => {}}
+              style={{ paddingTop: "8px" }}
+            >
+              <Form.Item name="search">
+                <Input
+                  bordered={false}
+                  placeholder="Search..."
+                  allowClear
+                  style={{
+                    alignSelf: "center",
+                    marginLeft: "50px",
+                    backgroundColor: "#f0f2f5",
+                  }}
+                />
+              </Form.Item>
+            </Form>
+          )}
         </div>
         <div className="header-col header-nav">
           <Menu
