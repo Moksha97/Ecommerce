@@ -28,6 +28,7 @@ class Product extends Component {
       product: {},
       options: [],
       option: {},
+      buyNow: false,
     };
   }
 
@@ -85,10 +86,13 @@ class Product extends Component {
   };
   onFinish = async (values) => {
     await this.addToCart(values);
+    const { buyNow } = this.state;
+    if (buyNow) {
+      window.location.href = "/cart";
+    }
   };
 
   addToCart = async (values) => {
-    console.log("values", values);
     const { notification } = this.props;
     const { quantity, sid } = values;
     const { id } = this.props.params;
@@ -121,7 +125,6 @@ class Product extends Component {
 
   render() {
     const { product, options, option } = this.state;
-
     return (
       <Layout
         className="layout-default layout-signin"
@@ -190,6 +193,7 @@ class Product extends Component {
                           className="row-col"
                           onFinish={this.onFinish}
                           onFinishFailed={this.onFinishFailed}
+                          initialValues={{ sid: option.sid }}
                         >
                           <Form.Item
                             className=""
@@ -230,7 +234,6 @@ class Product extends Component {
                               onChange={this.sellerChanged}
                               placeholder="Seller"
                               optionFilterProp="children"
-                              defaultValue={option.sid}
                               options={options.map((option) => {
                                 return {
                                   label: option.sname,
@@ -259,18 +262,18 @@ class Product extends Component {
                           </Form.Item>
                           <Space direction="horizontal">
                             <Form.Item name="buy">
-                              <Button type="primary" htmlType="submit">
+                              <Button
+                                onClick={() => {
+                                  this.setState({ buyNow: true });
+                                }}
+                                type="primary"
+                                htmlType="submit"
+                              >
                                 BUY NOW
                               </Button>
                             </Form.Item>
                             <Form.Item name="addToCart">
-                              <Button
-                                type="default"
-                                htmlType="submit"
-                                onClick={() => {
-                                  console.log("F");
-                                }}
-                              >
+                              <Button type="default" htmlType="submit">
                                 ADD TO CART
                               </Button>
                             </Form.Item>

@@ -3,7 +3,6 @@ import { Col, Row, Divider, Card, Input, Form } from "antd";
 import { Button, Space, Layout } from "antd";
 import AppFooter from "../components/AppFooter";
 import AppHeader from "../components/AppHeader";
-import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
 import ax from "../utils/httpreq";
 
@@ -240,10 +239,11 @@ class Profile extends Component {
         style={{ height: "100%" }}
       >
         <AppHeader />
-        <Categories />
+        {/*<Categories />*/}
         <Content
           style={{
-            marginBottom: "100px",
+            paddingBottom: "100px",
+            paddingTop: "100px",
             paddingLeft: "10%",
             paddingRight: "10%",
           }}

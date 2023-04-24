@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Button, Layout, Space } from "antd";
+import { Button, Empty, Layout, Space } from "antd";
 import { Col, Row, Divider } from "antd";
 import { Steps } from "antd";
 import AppHeader from "../components/AppHeader";
-import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
 import UnsplashImage from "../components/AsyncImage";
 import ax from "../utils/httpreq";
@@ -66,122 +65,128 @@ class OrderHistory extends Component {
     const { orders } = this.state;
     console.log("orders", orders);
     return (
-      <>
-        <div style={{ backgroundColor: "white" }}>
-          <Layout
-            className="layout-default layout-signin"
-            style={{ height: "100%" }}
+      <div style={{ backgroundColor: "white" }}>
+        <Layout
+          className="layout-default layout-signin"
+          style={{ height: "100%" }}
+        >
+          <AppHeader />
+          {/*<Categories />*/}
+          <Content
+            style={{
+              paddingBottom: "100px",
+              paddingTop: "100px",
+              paddingLeft: "10%",
+              paddingRight: "10%",
+            }}
           >
-            <AppHeader />
-            <Categories />
-            <Content
-              style={{
-                paddingBottom: "100px",
-                paddingLeft: "10%",
-                paddingRight: "10%",
-              }}
+            <Row
+              gutter={[24, 0]}
+              justify="left"
+              style={{ marginLeft: "50px", marginRight: "50px" }}
             >
-              <Row
-                gutter={[24, 0]}
-                justify="left"
-                style={{ marginLeft: "50px", marginRight: "50px" }}
-              >
-                <Col span={24}>
-                  <h1>Order History</h1>
-                </Col>
-                <Col span={24}>
-                  {orders.map((order) => (
-                    <Row key={order.oid}>
-                      <Col
-                        span={24}
-                        style={{ paddingBottom: "40px", paddingTop: "40px" }}
-                      >
-                        <Steps
-                          current={order.statusNumber}
-                          items={[
-                            {
-                              title: "Accepted",
-                            },
-                            {
-                              title: "In Progress",
-                            },
-                            {
-                              title: "Out for Delivery",
-                            },
-                            {
-                              title: "Delivered",
-                            },
-                          ]}
-                        />
-                      </Col>
-                      <Col span={6}>
-                        <pre style={{ margin: 0 }}>
-                          <h4 style={{ marginBottom: "0px" }}>Order Placed</h4>
-                          <h4 style={{ marginTop: "0px" }}>
-                            {new Date(order.timestamp).toUTCString()}
-                          </h4>
-                          {/*<h4 style={{ marginTop: "0px" }}>US $ </h4>*/}
-                          <h4 style={{ marginBottom: "0px" }}>
-                            Order #{order.oid}
-                          </h4>
-                        </pre>
-                      </Col>
-                      <Col span={12}>
-                        {order.orderitems.map((product) => (
-                          <Row style={{ paddingBottom: "10px" }}>
-                            <Col span={12}>
-                              <UnsplashImage
-                                height={100}
-                                keyword={product.pname}
-                              />
-                            </Col>
-                            <Col span={12}>
-                              <p style={{ margin: "0 0 0 10px" }}>
-                                Product: {product.pname}
-                              </p>
-                              <p style={{ margin: "0 0 0 10px" }}>
-                                Quantity: {product.quantity}
-                              </p>
-                              <p style={{ margin: "0 0 0 10px" }}>
-                                Item price: US $ {product.price}
-                              </p>
-                            </Col>
-                          </Row>
-                        ))}
-                      </Col>
+              <Col span={24}>
+                <h1>Order History</h1>
+              </Col>
+              <Col span={24}>
+                {orders.length === 0 ? (
+                  <Col span={24}>
+                    <Empty />
+                  </Col>
+                ) : (
+                  ""
+                )}
+                {orders.map((order) => (
+                  <Row key={order.oid}>
+                    <Col
+                      span={24}
+                      style={{ paddingBottom: "40px", paddingTop: "40px" }}
+                    >
+                      <Steps
+                        current={order.statusNumber}
+                        items={[
+                          {
+                            title: "Accepted",
+                          },
+                          {
+                            title: "In Progress",
+                          },
+                          {
+                            title: "Out for Delivery",
+                          },
+                          {
+                            title: "Delivered",
+                          },
+                        ]}
+                      />
+                    </Col>
+                    <Col span={6}>
+                      <pre style={{ margin: 0 }}>
+                        <h4 style={{ marginBottom: "0px" }}>Order Placed</h4>
+                        <h4 style={{ marginTop: "0px" }}>
+                          {new Date(order.timestamp).toUTCString()}
+                        </h4>
+                        {/*<h4 style={{ marginTop: "0px" }}>US $ </h4>*/}
+                        <h4 style={{ marginBottom: "0px" }}>
+                          Order #{order.oid}
+                        </h4>
+                      </pre>
+                    </Col>
+                    <Col span={12}>
+                      {order.orderitems.map((product) => (
+                        <Row style={{ paddingBottom: "10px" }}>
+                          <Col span={12}>
+                            <UnsplashImage
+                              height={100}
+                              keyword={product.pname}
+                            />
+                          </Col>
+                          <Col span={12}>
+                            <p style={{ margin: "0 0 0 10px" }}>
+                              Product: {product.pname}
+                            </p>
+                            <p style={{ margin: "0 0 0 10px" }}>
+                              Quantity: {product.quantity}
+                            </p>
+                            <p style={{ margin: "0 0 0 10px" }}>
+                              Item price: US $ {product.price}
+                            </p>
+                          </Col>
+                        </Row>
+                      ))}
+                    </Col>
 
-                      <Col
-                        span={6}
-                        style={{ justifyContent: "right", display: "flex" }}
-                      >
-                        <Space direction={"vertical"}>
-                          <Button
-                            type="primary"
-                            onClick={() => {
-                              this.viewInvoice(order.oid);
-                            }}
-                          >
-                            View invoice
+                    <Col
+                      span={6}
+                      style={{ justifyContent: "right", display: "flex" }}
+                    >
+                      <Space direction={"vertical"}>
+                        <Button
+                          type="primary"
+                          onClick={() => {
+                            this.viewInvoice(order.oid);
+                          }}
+                        >
+                          View invoice
+                        </Button>
+                        {order.statusNumber === 3 ||
+                        order.statusNumber === 4 ? (
+                          ""
+                        ) : (
+                          <Button danger type="primary">
+                            Cancel
                           </Button>
-                          {order.statusNumber === 3 ||
-                          order.statusNumber === 4 ? (
-                            ""
-                          ) : (
-                            <Button danger type="primary">
-                              Cancel
-                            </Button>
-                          )}
-                        </Space>
-                      </Col>
-                      <Divider />
-                    </Row>
-                  ))}
-                </Col>
-              </Row>
-            </Content>
-          </Layout>
-        </div>
-      </>
+                        )}
+                      </Space>
+                    </Col>
+                    <Divider />
+                  </Row>
+                ))}
+              </Col>
+            </Row>
+          </Content>
+        </Layout>
+      </div>
     );
   }
 }

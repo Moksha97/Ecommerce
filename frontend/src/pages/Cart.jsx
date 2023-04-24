@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Button, Card, Layout, Space } from "antd";
+import { Button, Card, Empty, Layout, Space } from "antd";
 import { Col, Row, Divider } from "antd";
 import AppHeader from "../components/AppHeader";
-import Categories from "../components/Categories";
 import { Content } from "antd/es/layout/layout";
 import AppFooter from "../components/AppFooter";
 import ax from "../utils/httpreq";
@@ -12,7 +11,12 @@ class Cart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cart: [],
+      cart: {
+        discountprice: 0,
+        finalprice: 0,
+        totalprice: 0,
+        products: [],
+      },
       user: {},
       account: null,
       address: null,
@@ -47,25 +51,41 @@ class Cart extends Component {
       });
     } else {
       let cart = res.data;
-      cart = await Promise.all(
-        cart.map(async (item) => {
-          const productRes = await ax.get(`/product/${item.pid}`);
-          if (productRes.status === 200) {
-            const { data } = productRes;
-            const seller = data.options.find((o) => o.sid === item.sid);
-            let price = Math.round(parseFloat(seller.price) * 100) / 100;
-            let discount = Math.round(parseFloat(seller.discount) * 100) / 100;
-            seller.finalPrice = Math.round(price * (1 - discount) * 100) / 100;
-            item.seller = seller;
-            item.product = data;
-          } else {
-            item.product = null;
-            item.seller = null;
-          }
-          return item;
-        })
-      );
-      this.setState({ cart: cart });
+      if (cart.products) {
+        cart.products = await Promise.all(
+          cart.products.map(async (item) => {
+            const productRes = await ax.get(`/product/${item.pid}`);
+            if (productRes.status === 200) {
+              const { data } = productRes;
+              const seller = data.options.find((o) => o.sid === item.sid);
+              let price = Math.round(parseFloat(seller.price) * 100) / 100;
+              let discount =
+                Math.round(parseFloat(seller.discount) * 100) / 100;
+              seller.finalPrice =
+                Math.round(price * (1 - discount) * 100) / 100;
+              item.seller = seller;
+              item.product = data;
+            } else {
+              item.product = null;
+              item.seller = null;
+            }
+            return item;
+          })
+        );
+        cart.discountprice = Math.round(cart.discountprice * 100) / 100;
+        cart.finalprice = Math.round(cart.finalprice * 100) / 100;
+        cart.totalprice = Math.round(cart.totalprice * 100) / 100;
+        this.setState({ cart: cart });
+      } else {
+        this.setState({
+          cart: {
+            discountprice: 0,
+            finalprice: 0,
+            totalprice: 0,
+            products: [],
+          },
+        });
+      }
     }
 
     const { user } = this.state;
@@ -179,7 +199,6 @@ class Cart extends Component {
 
   render() {
     const { cart, account, address } = this.state;
-    console.log(cart);
     return (
       <div>
         <Layout
@@ -187,9 +206,10 @@ class Cart extends Component {
           style={{ height: "100%" }}
         >
           <AppHeader />
-          <Categories />
+          {/*<Categories />*/}
           <Content
             style={{
+              paddingTop: "100px",
               paddingBottom: "100px",
               paddingLeft: "10%",
               paddingRight: "10%",
@@ -216,7 +236,14 @@ class Cart extends Component {
                   justify="left"
                   style={{ marginRight: "50px" }}
                 >
-                  {cart.map((item) => (
+                  {cart.products.length == 0 ? (
+                    <Col span={24}>
+                      <Empty />
+                    </Col>
+                  ) : (
+                    ""
+                  )}
+                  {cart.products.map((item) => (
                     <>
                       <Col span={8}>
                         <Card
@@ -238,7 +265,10 @@ class Cart extends Component {
                           </Col>
                           <Col
                             span={4}
-                            style={{ justifyContent: "right", display: "flex" }}
+                            style={{
+                              justifyContent: "right",
+                              display: "flex",
+                            }}
                           >
                             <h3>
                               US ${" "}
@@ -276,7 +306,10 @@ class Cart extends Component {
                           </Col>
                           <Col
                             span={8}
-                            style={{ justifyContent: "right", display: "flex" }}
+                            style={{
+                              justifyContent: "right",
+                              display: "flex",
+                            }}
                           >
                             <Space direction={"vertical"} align={"end"}>
                               <Button
@@ -327,7 +360,7 @@ class Cart extends Component {
                     }}
                   >
                     <div>Subtotal</div>
-                    <div>US $Price</div>
+                    <div>US $ {cart.totalprice}</div>
                   </div>
                   <div
                     style={{
@@ -345,7 +378,7 @@ class Cart extends Component {
                     }}
                   >
                     <div>Discount</div>
-                    <div>US $Discount</div>
+                    <div>US $ {cart.discountprice}</div>
                   </div>
                   {/*<div*/}
                   {/*  style={{*/}
@@ -366,7 +399,9 @@ class Cart extends Component {
                     <div>
                       <b>Total</b>
                     </div>
-                    <div>US $Total</div>
+                    <div>
+                      <b>US $ {cart.finalprice}</b>
+                    </div>
                   </div>
                   <div
                     style={{

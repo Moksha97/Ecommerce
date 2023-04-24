@@ -159,6 +159,34 @@ class UserLanding extends Component {
     await this.fetchProductData();
   };
 
+  addToCart = async (pid, sid, quantity) => {
+    const { notification } = this.props;
+    const res = await ax.post("/cart/addtocart", {
+      quantity: quantity,
+      sid: sid,
+      pid: pid,
+    });
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      notification.success({
+        message: `Success`,
+        description: "Item added to cart",
+        placement: "topRight",
+      });
+    }
+  };
+
+  buyNow = async (pid, sid, quantity) => {
+    await this.addToCart(pid, sid, quantity);
+    window.location.href = "/cart";
+  };
+
   render = () => {
     const { notification } = this.props;
     const { products, showSidebar, allCategories, categories, discountRadio } =
@@ -317,10 +345,28 @@ class UserLanding extends Component {
                       />
                       <Row gutter={[6, 0]} className="card-footer">
                         <Col span={8}>
-                          <Button type="primary">BUY NOW</Button>
+                          <Button
+                            onClick={() => {
+                              this.buyNow(product.pid, product.option.sid, 1);
+                            }}
+                            type="primary"
+                          >
+                            BUY NOW
+                          </Button>
                         </Col>
                         <Col span={8}>
-                          <Button type="button">ADD TO CART</Button>
+                          <Button
+                            onClick={() => {
+                              this.addToCart(
+                                product.pid,
+                                product.option.sid,
+                                1
+                              );
+                            }}
+                            type="button"
+                          >
+                            ADD TO CART
+                          </Button>
                         </Col>
                       </Row>
                     </Card>
