@@ -26,11 +26,25 @@ router.post(
       return;
     }
 
-    // rate product
-    await db.query(
-      "Insert into productrating (username, pid, rating) values (?, ?, ?)",
-      [username, pid, rating]
+    // check if product rating exists
+    const productRating = await db.query(
+      "Select * from productrating where username = ? and pid = ?",
+      [username, pid]
     );
+
+    if (productRating.length > 0) {
+      await db.query(
+        "Update productrating set rating = ? where username = ? and pid = ?",
+        [rating, username, pid]
+      );
+    } else {
+      // rate product
+      await db.query(
+        "Insert into productrating (username, pid, rating) values (?, ?, ?)",
+        [username, pid, rating]
+      );
+    }
+
     res.json({ message: "Product rated successfully" });
   })
 );
