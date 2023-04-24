@@ -33,7 +33,11 @@ function App() {
             path="/product/:id"
             element={<Product notification={api} />}
           />
-          <Route exact path="/invoice/:id" element={<Invoice />} />
+          <Route
+            exact
+            path="/invoice/:oid"
+            element={<Invoice notification={api} />}
+          />
           <Route
             exact
             path="/orders"

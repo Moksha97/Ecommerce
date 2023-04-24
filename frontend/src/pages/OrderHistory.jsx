@@ -43,6 +43,12 @@ class OrderHistory extends Component {
             order.orderitems = [];
           }
 
+          let orderTotal = order.orderitems
+            .map((item) => parseFloat(item.price))
+            .reduce((prev, next) => {
+              return prev + next;
+            });
+
           let statuses = [
             "PLACED",
             "PACKED",
@@ -51,6 +57,7 @@ class OrderHistory extends Component {
             "CANCELED",
           ];
           order.statusNumber = statuses.indexOf(order.status);
+          order.total = orderTotal;
           return order;
         })
       );
@@ -87,7 +94,6 @@ class OrderHistory extends Component {
 
   render() {
     const { orders } = this.state;
-    console.log(orders);
     return (
       <div style={{ backgroundColor: "white" }}>
         <Layout
@@ -160,6 +166,9 @@ class OrderHistory extends Component {
                         <h4 style={{ marginBottom: "0px" }}>
                           Order #{order.oid}
                         </h4>
+                        <h4 style={{ marginBottom: "0px" }}>
+                          Total US $ {order.total}
+                        </h4>
                       </pre>
                     </Col>
                     <Col span={12}>
@@ -211,14 +220,9 @@ class OrderHistory extends Component {
                         >
                           View invoice
                         </Button>
-                        {order.statusNumber === 3 ||
-                        order.statusNumber === 4 ? (
-                          ""
-                        ) : (
-                          <Button danger type="primary">
-                            Cancel
-                          </Button>
-                        )}
+                        {order.statusNumber === 3 || order.statusNumber === 4
+                          ? ""
+                          : ""}
                       </Space>
                     </Col>
                     <Divider />
