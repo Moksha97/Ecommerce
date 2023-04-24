@@ -34,7 +34,11 @@ function App() {
             element={<Product notification={api} />}
           />
           <Route exact path="/invoice/:id" element={<Invoice />} />
-          <Route exact path="/orders" element={<OrderHistory />} />
+          <Route
+            exact
+            path="/orders"
+            element={<OrderHistory notification={api} />}
+          />
           <Route exact path="/cart" element={<Cart notification={api} />} />
           <Route
             exact

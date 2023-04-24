@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Empty, Layout, Space } from "antd";
+import { Button, Empty, Layout, Rate, Space } from "antd";
 import { Col, Row, Divider } from "antd";
 import { Steps } from "antd";
 import AppHeader from "../components/AppHeader";
@@ -42,6 +42,7 @@ class OrderHistory extends Component {
           } else {
             order.orderitems = [];
           }
+
           let statuses = [
             "PLACED",
             "PACKED",
@@ -61,8 +62,32 @@ class OrderHistory extends Component {
     window.location.href = `/invoice/${oid}`;
   };
 
+  rateProduct = (pid, rating) => {
+    const { notification } = this.props;
+    let res = ax.post("/product/rate", {
+      pid: pid,
+      rating: rating,
+    });
+    if (res.status !== 200) {
+      const { response } = res;
+      notification.error({
+        message: `Error: ${response.status}`,
+        description: response.data.error,
+        placement: "topRight",
+      });
+    } else {
+      const { data } = res;
+      notification.success({
+        message: `Success`,
+        description: data.message,
+        placement: "topRight",
+      });
+    }
+  };
+
   render() {
     const { orders } = this.state;
+    console.log(orders);
     return (
       <div style={{ backgroundColor: "white" }}>
         <Layout
@@ -139,7 +164,7 @@ class OrderHistory extends Component {
                     </Col>
                     <Col span={12}>
                       {order.orderitems.map((product) => (
-                        <Row style={{ paddingBottom: "10px" }}>
+                        <Row style={{ paddingBottom: "10px" }} id={product.pid}>
                           <Col span={12}>
                             <UnsplashImage
                               height={100}
@@ -147,15 +172,27 @@ class OrderHistory extends Component {
                             />
                           </Col>
                           <Col span={12}>
-                            <p style={{ margin: "0 0 0 10px" }}>
+                            <div style={{ margin: "0 0 0 10px" }}>
                               Product: {product.pname}
-                            </p>
-                            <p style={{ margin: "0 0 0 10px" }}>
+                            </div>
+                            <div style={{ margin: "0 0 0 10px" }}>
                               Quantity: {product.quantity}
-                            </p>
-                            <p style={{ margin: "0 0 0 10px" }}>
+                            </div>
+                            <div style={{ margin: "0 0 0 10px" }}>
                               Item price: US $ {product.price}
-                            </p>
+                            </div>
+                            {order.statusNumber === 3 ? (
+                              <div style={{ margin: "0 0 0 10px" }}>
+                                <Rate
+                                  allowHalf
+                                  onChange={(rating) => {
+                                    this.rateProduct(product.pid, rating);
+                                  }}
+                                />
+                              </div>
+                            ) : (
+                              ""
+                            )}
                           </Col>
                         </Row>
                       ))}
