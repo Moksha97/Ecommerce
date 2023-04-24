@@ -102,10 +102,16 @@ class OrderHistory extends Component {
                       style={{ paddingBottom: "40px", paddingTop: "40px" }}
                     >
                       <Steps
-                        current={order.statusNumber}
+                        status={order.statusNumber === 4 ? "error" : "finish"}
+                        current={
+                          order.statusNumber >= 4 ? 0 : order.statusNumber
+                        }
                         items={[
                           {
-                            title: "Accepted",
+                            title:
+                              order.statusNumber === 4
+                                ? "Cancelled"
+                                : "Accepted",
                           },
                           {
                             title: "In Progress",

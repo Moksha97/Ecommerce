@@ -6,6 +6,7 @@ import { AppstoreOutlined } from "@ant-design/icons";
 import Inventory from "./admin/Inventory";
 import Seller from "./admin/Seller";
 import Product from "./admin/Product";
+import Order from "./admin/Order";
 
 class AdminLanding extends Component {
   constructor(props) {
@@ -92,7 +93,7 @@ class AdminLanding extends Component {
       case "updateInventory":
         return <Inventory mode={"update"} notification={notification} />;
       case "orders":
-        return <div>Orders</div>;
+        return <Order notification={notification} />;
       case "addProducts":
         return <Product mode={"add"} notification={notification} />;
       case "updateProducts":
