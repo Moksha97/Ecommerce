@@ -63,11 +63,6 @@ class Metrics extends Component {
                 <b>Revenue </b>
                 <span style={{ float: "right" }}>US $ {metrics.revenue}</span>
                 <br />
-                <b>Active listing</b>
-                <span style={{ float: "right" }}>
-                  {metrics.active_listings}
-                </span>{" "}
-                <br />
                 <b>Not shipped</b>{" "}
                 <span style={{ float: "right" }}>{metrics.not_shipped}</span>{" "}
                 <br />
@@ -78,9 +73,6 @@ class Metrics extends Component {
                 <br />
                 <b>Cancelled</b>{" "}
                 <span style={{ float: "right" }}>{metrics.cancelled}</span>{" "}
-                <br />
-                <b>Out of stock</b>{" "}
-                <span style={{ float: "right" }}>{metrics.out_of_stock}</span>
               </Col>
             </Row>
           </Card>
@@ -115,6 +107,21 @@ class Metrics extends Component {
                     <br />
                   </div>
                 ))}
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={6} style={{ padding: "10px" }}>
+          <Card title="Inventory">
+            <Row>
+              <Col span={24}>
+                <b>Active listing</b>
+                <span style={{ float: "right" }}>
+                  {metrics.active_listings}
+                </span>{" "}
+                <br />
+                <b>Out of stock</b>{" "}
+                <span style={{ float: "right" }}>{metrics.out_of_stock}</span>
               </Col>
             </Row>
           </Card>
