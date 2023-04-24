@@ -73,8 +73,6 @@ class Order extends Component {
         <Col span={24}>
           <h2>{"Update order"}</h2>
         </Col>
-        <Col span={12}></Col>
-        <Col span={12}></Col>
         <Col span={12}>
           <Form ref={this.formRef} layout="vertical" onFinish={this.onFinish}>
             <Form.Item

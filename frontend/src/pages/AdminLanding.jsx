@@ -8,6 +8,7 @@ import Seller from "./admin/Seller";
 import Product from "./admin/Product";
 import Order from "./admin/Order";
 import Metrics from "./admin/Metrics";
+import ChangePassword from "./admin/ChangePassword";
 
 class AdminLanding extends Component {
   constructor(props) {
@@ -104,9 +105,9 @@ class AdminLanding extends Component {
       case "updateSeller":
         return <Seller mode={"update"} notification={notification} />;
       case "users":
-        return <div>Users</div>;
+        return <ChangePassword notification={notification} />;
       default:
-        return <div>Metrics</div>;
+        return <Metrics notification={notification} />;
     }
   };
 
