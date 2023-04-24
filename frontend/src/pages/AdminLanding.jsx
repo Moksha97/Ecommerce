@@ -57,6 +57,16 @@ class AdminLanding extends Component {
         label: "Inventory",
         key: "inventory",
         icon: <AppstoreOutlined />,
+        children: [
+          {
+            label: "Add new inventory",
+            key: "addInventory",
+          },
+          {
+            label: "Update inventory",
+            key: "updateInventory",
+          },
+        ],
       },
       {
         label: "Orders",
@@ -77,8 +87,10 @@ class AdminLanding extends Component {
     switch (current) {
       case "metrics":
         return "Metrics";
-      case "inventory":
-        return <Inventory />;
+      case "addInventory":
+        return <Inventory mode={"add"} notification={notification} />;
+      case "updateInventory":
+        return <Inventory mode={"update"} notification={notification} />;
       case "orders":
         return <div>Orders</div>;
       case "addProducts":

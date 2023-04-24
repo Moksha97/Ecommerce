@@ -34,7 +34,6 @@ class Product extends Component {
           placement: "topRight",
         });
       } else {
-        console.log(res.data);
         this.setState({ products: res.data });
       }
     }

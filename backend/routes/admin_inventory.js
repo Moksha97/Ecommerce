@@ -179,4 +179,13 @@ router.post(
   })
 );
 
+// get all inventory
+router.get(
+  "/list",
+  ash(async (req, res) => {
+    const [rows] = await db.query("Select * from inventory");
+    res.json(rows);
+  })
+);
+
 module.exports = router;

@@ -34,7 +34,6 @@ class Seller extends Component {
           placement: "topRight",
         });
       } else {
-        console.log(res.data);
         this.setState({ sellers: res.data });
       }
     }

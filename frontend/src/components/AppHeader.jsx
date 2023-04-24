@@ -179,7 +179,6 @@ class AppHeader extends Component {
                   menu={{
                     items: links,
                     onClick: (key) => {
-                      console.log("clicked on ", key);
                       return <Link to={key} />;
                     },
                   }}

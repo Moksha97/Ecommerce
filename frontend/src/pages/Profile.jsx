@@ -35,7 +35,6 @@ class Profile extends Component {
       const { data } = res;
       if (data.length !== 0) {
         let user = data[0];
-        console.log(user);
         this.setState({
           user: user,
         });
@@ -67,7 +66,6 @@ class Profile extends Component {
       });
     } else {
       const { data } = res;
-      console.log(data);
       this.setState({
         addresses: data,
       });

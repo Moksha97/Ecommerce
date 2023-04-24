@@ -63,7 +63,6 @@ class OrderHistory extends Component {
 
   render() {
     const { orders } = this.state;
-    console.log("orders", orders);
     return (
       <div style={{ backgroundColor: "white" }}>
         <Layout

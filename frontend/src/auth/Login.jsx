@@ -34,7 +34,6 @@ class Login extends Component {
       });
     } else {
       const { data } = res;
-      console.log(data);
       if (data.isadmin === 1 && account === "admin") {
         window.location.href = "/admin";
       } else if (data.isadmin === 0 && account === "customer") {

@@ -17,7 +17,6 @@ class Signup extends Component {
 
   onFinish = async (values) => {
     const { notification } = this.props;
-    console.log("Success:", values);
     const { fname, lname, email, password, phone } = values;
     const res = await ax.post("/signup", {
       username: email,
