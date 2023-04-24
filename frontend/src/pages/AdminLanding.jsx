@@ -7,6 +7,7 @@ import Inventory from "./admin/Inventory";
 import Seller from "./admin/Seller";
 import Product from "./admin/Product";
 import Order from "./admin/Order";
+import Metrics from "./admin/Metrics";
 
 class AdminLanding extends Component {
   constructor(props) {
@@ -87,7 +88,7 @@ class AdminLanding extends Component {
     const { notification } = this.props;
     switch (current) {
       case "metrics":
-        return "Metrics";
+        return <Metrics notification={notification} />;
       case "addInventory":
         return <Inventory mode={"add"} notification={notification} />;
       case "updateInventory":

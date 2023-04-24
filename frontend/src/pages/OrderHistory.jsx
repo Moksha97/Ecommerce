@@ -129,7 +129,7 @@ class OrderHistory extends Component {
                       <pre style={{ margin: 0 }}>
                         <h4 style={{ marginBottom: "0px" }}>Order Placed</h4>
                         <h4 style={{ marginTop: "0px" }}>
-                          {new Date(order.timestamp).toUTCString()}
+                          {new Date(order.timestamp).toUTCString().slice(0, 16)}
                         </h4>
                         {/*<h4 style={{ marginTop: "0px" }}>US $ </h4>*/}
                         <h4 style={{ marginBottom: "0px" }}>

@@ -49,7 +49,7 @@ router.get(
   "/product",
   ash(async (req, res) => {
     const [rows] = await db.query(
-      "SELECT pid, sum(quantity) as totalquantity, sum(price) as revenue, pname, pdesc, pcategory FROM items NATURAL JOIN product GROUP BY pid"
+      "SELECT pid, sum(quantity) as totalquantity, sum(price) as revenue, pname, pdesc, pcategory FROM items NATURAL JOIN product GROUP BY pid ORDER BY revenue DESC"
     );
 
     // var result = {};

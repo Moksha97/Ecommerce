@@ -32,7 +32,6 @@ class Order extends Component {
         placement: "topRight",
       });
     } else {
-      console.log(res.data);
       this.setState({ orders: res.data });
     }
   };
@@ -95,7 +94,7 @@ class Order extends Component {
                       "] " +
                       order.status +
                       " @ " +
-                      new Date(order.timestamp).toUTCString() +
+                      new Date(order.timestamp).toUTCString().slice(0, 16) +
                       " by " +
                       order.username}
                   </Select.Option>
@@ -109,9 +108,9 @@ class Order extends Component {
             >
               <Select>
                 {validStatus.map((status) => (
-                  <Option value={status} key={status}>
+                  <Select.Option value={status} key={status}>
                     {status}
-                  </Option>
+                  </Select.Option>
                 ))}
               </Select>
             </Form.Item>
