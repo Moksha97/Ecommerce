@@ -206,10 +206,12 @@ class Profile extends Component {
   };
 
   onProfileFinish = async (values) => {
+    const { phone, fname, lname } = values;
     const { notification } = this.props;
-    const res = await ax.put(`/users/updateUser`, {
-      fieldName: "name",
-      fieldValue: values.name,
+    const res = await ax.post(`/users/updateUser`, {
+      phone: phone,
+      fname: fname,
+      lname: lname,
     });
     if (res.status !== 200) {
       const { response } = res;
@@ -355,10 +357,14 @@ class Profile extends Component {
               Addresses
               <Row>
                 {addresses.map((address) => (
-                  <>
-                    <Divider orientation="left" plain>
-                      {user.preferredaddress === address.aid ? "Preferred" : ""}
-                    </Divider>
+                  <React.Fragment id={address.aid}>
+                    <Col span={24}>
+                      <Divider orientation="left" plain>
+                        {user.preferredaddress === address.aid
+                          ? "Preferred"
+                          : ""}
+                      </Divider>
+                    </Col>
                     <Col span={18}>
                       <code>{address.line1}</code>
                       <br />
@@ -395,7 +401,7 @@ class Profile extends Component {
                         </Button>
                       </Space>
                     </Col>
-                  </>
+                  </React.Fragment>
                 ))}
                 <Divider />
                 <Form
