@@ -10,12 +10,6 @@ async function getDetails(username) {
   );
   return rows;
 }
-
-/* GET users listing. */
-router.get("/", function (req, res) {
-  return res.json({ message: "List of users" });
-});
-
 /* Get user details like fnmae, lnmae so on*/
 router.get(
   "/getUser",
@@ -26,23 +20,29 @@ router.get(
   })
 );
 
-async function updateDetails(username, fieldName, fieldValue) {
-  const [result] = await db.query(`UPDATE user SET ? = ? WHERE username = ?`, [
-    fieldName,
-    fieldValue,
-    username,
-  ]);
-  return result;
-}
+// async function updateDetails(username, fieldName, fieldValue) {
+//   const [result] = await db.query(`UPDATE user SET ? = ? WHERE username = ?`, [
+//     fieldName,
+//     fieldValue,
+//     username,
+//   ]);
+//   return result;
+// }
 
 /* Update user details */
-router.put(
+router.post(
   "/updateUser",
   ash(async (req, res) => {
     const username = req.username;
-    const { fieldName, fieldValue } = req.body;
-    await updateDetails(username, fieldName, fieldValue);
-    res.send("User details updated successfully");
+    const { phone, fname, lname } = req.body;
+
+    await db.query(
+      `UPDATE user SET phone = ?, fname = ?, lname = ? WHERE username = ?`,
+      [phone, fname, lname, username]
+    );
+
+    const [rows] = await getDetails(username);
+    res.json(rows);
   })
 );
 
